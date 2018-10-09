@@ -1,7 +1,7 @@
 #ifndef VECTOR3D_H
 #define VECTOR3D_H
-#include <sstream>
-#include <vector>
+// #include <sstream>
+// #include <vector>
 
 class Vector3
 {
@@ -18,6 +18,7 @@ public:
     Vector3 operator+(Vector3 const &secondVector);
     Vector3 operator-(Vector3 const &secondVector);
     Vector3 operator*(double const &scalar);
+    Vector3 operator/(double const &scalar);
 
     Vector3 cross(Vector3 const &secondVector);
     double dot(Vector3 const &secondVector);
@@ -25,9 +26,9 @@ public:
 protected:
 
 private:
-    double m_x;
-    double m_y;
-    double m_z;
+    double m_x{0};
+    double m_y{0};
+    double m_z{0};
 
 };
 #endif // VECTOR3D_H
