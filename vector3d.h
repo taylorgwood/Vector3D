@@ -1,8 +1,7 @@
 #ifndef VECTOR3D_H
 #define VECTOR3D_H
-// #include <sstream>
-// #include <vector>
-#include "physics.h"
+//#include "physics.h"
+class PhysicsObject;
 
 class Vector3
 {
@@ -33,10 +32,3 @@ private:
 
 };
 #endif // VECTOR3D_H
-
-//    int Vector3D::add_integers(int firstNumber, int secondNumber);
-//    std::vector<double> Vector3D::make_vector(double firstNumber, double secondNumber, double thirdNumber);
-//    std::vector<double> Vector3D::scale_vector(std::vector <double> initialVector, double scalingFactor);
-//    std::vector<double> Vector3D::add_vectors(std::vector<double> firstVector, std::vector<double> secondVector);
-//    Vector3D Vector3D::make_vector3D(double firstNumber, double secondNumber, double thirdNumber);
-//    Vector3D operator+(Vector3D firstVector, const secondVector);

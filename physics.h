@@ -19,8 +19,7 @@ public:
     void update(double timestep); // increaments time, p,v,a; pass it dt. updates MPosition, etc.
     void box_collision(); // public?
     double mBoxSize{5};
-    create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
-
+    void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
 
 //    Vector3 calculate_collision();
 
@@ -38,3 +37,5 @@ private:
 
 };
 #endif // PHYSICS_H
+
+

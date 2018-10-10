@@ -1,6 +1,5 @@
 #include "vector3d.h"
-// #include <vector>
-// #include <iostream>
+#include "physics.h"
 
 Vector3::~Vector3()
 {
