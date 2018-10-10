@@ -2,6 +2,7 @@
 #define VECTOR3D_H
 // #include <sstream>
 // #include <vector>
+#include "physics.h"
 
 class Vector3
 {

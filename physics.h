@@ -19,22 +19,21 @@ public:
     void update(double timestep); // increaments time, p,v,a; pass it dt. updates MPosition, etc.
     void box_collision(); // public?
     double mBoxSize{5};
-//    Vector3 get_next_p();
-//    Vector3 get_next_v();
-//    Vector3 get_next_a();
-//    double get_timestep();
+    create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
+
+
 //    Vector3 calculate_collision();
 
 protected:
 
 private:
-    double mCoefficientOfRestitution{0.8};
+    double  mCoefficientOfRestitution{0.8};
     Vector3 mPosition{0,0,0};
     Vector3 mVelocity{0,0,0};
     Vector3 mAcceleration{0,0,0};
-    double mDragForce{0};
-    double mMass{0};
-    double mRadius{0};
+    double  mDragForce{0};
+    double  mMass{0};
+    double  mRadius{0};
 
 
 };

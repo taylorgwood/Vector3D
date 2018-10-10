@@ -10,11 +10,11 @@ PhysicsObject::~PhysicsObject()
 
 //}
 
-//PhysicsObject::PhysicsObject()
-//{
-////    PhysicWorld physicsWorld;
-////    physicsWorld.create_world();
-//}
+PhysicsObject::PhysicsObject()
+{
+//    PhysicWorld physicsWorld;
+//    physicsWorld.create_world();
+}
 
 double PhysicsObject::get_CoefficientOfRestitution() const
 {
@@ -85,9 +85,11 @@ void PhysicsObject::box_collision()
     else{}
 }
 
-void move_back()
+PhysicsObject create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity)
 {
-
+    mPosition = shapeLocation;
+    mRadius = sphereRadius;
+    mVelocity = initialVelocity;
 }
 
 //double get_timestep()
