@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "vector3d.h"
-#include "physics.h"
+#include "physicsObject.h"
 
 void EXPECT_EQ_VECTORS(const Vector3& firstVector, const Vector3& secondVector)
 {

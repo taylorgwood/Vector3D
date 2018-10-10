@@ -16,8 +16,8 @@ set(TEST_NAME ${PROJECT_NAME}_UnitTest)
 add_library(${PROJECT_NAME} STATIC
     vector3d.h
     vector3d.cpp
-    physics.cpp
-    physics.h)
+    physicsobject.cpp
+    physicsobject.h)
 
 add_executable(${TEST_NAME} vector3d_unittests.cpp)
 target_link_libraries(${TEST_NAME} gtest gtest_main ${PROJECT_NAME})

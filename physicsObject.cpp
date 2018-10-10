@@ -1,4 +1,4 @@
-#include "physics.h"
+#include "physicsObject.h"
 
 PhysicsObject::~PhysicsObject()
 {

@@ -1,5 +1,5 @@
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#ifndef PHYSICSOBJECT_H
+#define PHYSICSOBJECT_H
 #include "vector3d.h"
 class Vector3;
 
@@ -32,6 +32,6 @@ private:
     double  mRadius{0};
 
 };
-#endif // PHYSICS_H
+#endif // PHYSICSOBJECT_H
 
 
