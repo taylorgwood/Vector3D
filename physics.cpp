@@ -10,11 +10,11 @@ PhysicsObject::~PhysicsObject()
 
 //}
 
-PhysicsObject::PhysicsObject()
-{
-//    PhysicWorld physicsWorld;
-//    physicsWorld.create_world();
-}
+//PhysicsObject::PhysicsObject()
+//{
+////    PhysicWorld physicsWorld;
+////    physicsWorld.create_world();
+//}
 
 double PhysicsObject::get_CoefficientOfRestitution() const
 {
@@ -36,9 +36,9 @@ Vector3 PhysicsObject::get_acceleration() const
     return mAcceleration;
 }
 
-double PhysicsObject::get_drag_force() const
+Vector3 PhysicsObject::get_drag_force() const
 {
-    double dragForce{0};
+    Vector3 dragForce{0,0,0};
     //dragForce = (1/2)*density*(get_v()*get_v())*get_CoefficientOfRestitution()*get_radius();
     return dragForce;
 }
@@ -56,12 +56,12 @@ double PhysicsObject::get_radius() const
 
 void PhysicsObject::update(double timestep)
 {
-    mPosition = get_p() + get_next_v()*timestep;
-    mVelocity = get_v() + get_next_a()*timestep;
-    mAcceleration = get_a() + get_drag_force()/get_mass();
+    mPosition = get_position() + get_velocity()*timestep;
+    mVelocity = get_velocity() + get_acceleration()*timestep;
+    mAcceleration = get_acceleration() + get_drag_force()/get_mass();
 }
 
-Vector3 PhysicsObject::box_collision()
+void PhysicsObject::box_collision()
 {
     double detectionSize = mBoxSize-get_radius();
     if ((mPosition.get_x() >= detectionSize) || (mPosition.get_x() <= -detectionSize))

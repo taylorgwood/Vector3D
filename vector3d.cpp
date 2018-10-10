@@ -25,17 +25,17 @@ double Vector3::get_z() const
     return m_z;
 }
 
-void Vector3::set_x(double x) const
+void Vector3::set_x(double const x)
 {
     m_x = x;
 }
 
-void Vector3::set_y(double y) const
+void Vector3::set_y(double const y)
 {
     m_y = y;
 }
 
-void Vector3::set_z(double z) const
+void Vector3::set_z(double const z)
 {
     m_z = z;
 }

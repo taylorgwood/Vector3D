@@ -13,11 +13,11 @@ public:
     Vector3 get_position() const;
     Vector3 get_velocity() const;
     Vector3 get_acceleration() const;
-    double get_drag_force() const;
+    Vector3 get_drag_force() const;
     double get_mass() const;
     double get_radius() const;
     void update(double timestep); // increaments time, p,v,a; pass it dt. updates MPosition, etc.
-    Vector3 box_collision(); // public?
+    void box_collision(); // public?
     double mBoxSize{5};
 //    Vector3 get_next_p();
 //    Vector3 get_next_v();
