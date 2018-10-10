@@ -12,16 +12,16 @@ public:
     double get_x() const; // done
     double get_y() const;
     double get_z() const;
-//    void set_x(double x); // decide if need
-//    void set_y(double y);
-//    void set_z(double z);
+    void set_x(double x); // decide if need
+    void set_y(double y);
+    void set_z(double z);
     Vector3 operator+(Vector3 const &secondVector);
     Vector3 operator-(Vector3 const &secondVector);
     Vector3 operator*(double const &scalar);
     Vector3 operator/(double const &scalar);
 
     Vector3 cross(Vector3 const &secondVector);
-    double dot(Vector3 const &secondVector);
+    double dot(Vector3 secondVector);
 
 protected:
 

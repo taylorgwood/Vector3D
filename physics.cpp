@@ -1,7 +1,7 @@
 #include "physics.h"
 #include "vector3d.h"
 
-Physics::~Physics()
+PhysicsObject::~PhysicsObject()
 {
 }
 
@@ -10,55 +10,85 @@ Physics::~Physics()
 
 //}
 
-double Physics::get_CoefficientOfRestitution() const
+PhysicsObject::PhysicsObject()
+{
+//    PhysicWorld physicsWorld;
+//    physicsWorld.create_world();
+}
+
+double PhysicsObject::get_CoefficientOfRestitution() const
 {
     return mCoefficientOfRestitution;
 }
 
-Vector3 Physics::get_p() const
+Vector3 PhysicsObject::get_position() const
 {
     return mPosition;
 }
 
-Vector3 Physics::get_v() const
+Vector3 PhysicsObject::get_velocity() const
 {
     return mVelocity;
 }
 
-Vector3 Physics::get_a() const
+Vector3 PhysicsObject::get_acceleration() const
 {
     return mAcceleration;
 }
 
-double Physics::get_drag_force() const
+double PhysicsObject::get_drag_force() const
 {
     double dragForce{0};
     //dragForce = (1/2)*density*(get_v()*get_v())*get_CoefficientOfRestitution()*get_radius();
     return dragForce;
 }
 
-double Physics::get_mass() const
+double PhysicsObject::get_mass() const
 {
     return mMass;
 }
 
-//Vector3 get_next_p()
-//{
-//    Vector3 next_p = get_p() + get_next_v()*get_timestep();
-//    return next_p;
-//}
+double PhysicsObject::get_radius() const
+{
+    return mRadius;
+}
 
-//Vector3 get_next_v()
-//{
-//    Vector3 next_v = get_v() + get_next_a()*get_timestep();
-//    return next_v;
-//}
 
-//Vector3 get_next_a()
-//{
-//    Vector3 next_a = get_a() + get_drag_force()/get_mass();
-//    return next_a;
-//}
+void PhysicsObject::update(double timestep)
+{
+    mPosition = get_p() + get_next_v()*timestep;
+    mVelocity = get_v() + get_next_a()*timestep;
+    mAcceleration = get_a() + get_drag_force()/get_mass();
+}
+
+Vector3 PhysicsObject::box_collision()
+{
+    double detectionSize = mBoxSize-get_radius();
+    if ((mPosition.get_x() >= detectionSize) || (mPosition.get_x() <= -detectionSize))
+    {
+        mPosition.set_x(detectionSize);
+        double velocityAfterBounce{-mVelocity.get_x()*mCoefficientOfRestitution};
+        mVelocity.set_x(velocityAfterBounce);
+    }
+    else if((mPosition.get_y() >= detectionSize) || (mPosition.get_y() <= -detectionSize))
+    {
+        mPosition.set_y(detectionSize);
+        double velocityAfterBounce{-mVelocity.get_y()*mCoefficientOfRestitution};
+        mVelocity.set_y(velocityAfterBounce);
+    }
+    else if((mPosition.get_z() >= detectionSize) || (mPosition.get_z() <= -detectionSize))
+    {
+        mPosition.set_z(detectionSize);
+        double velocityAfterBounce{-mVelocity.get_z()*mCoefficientOfRestitution};
+        mVelocity.set_z(velocityAfterBounce);
+    }
+    else{}
+}
+
+void move_back()
+{
+
+}
 
 //double get_timestep()
 //{

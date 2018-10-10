@@ -71,3 +71,17 @@ TEST(VectorMulitplication,givenVectorandScalar_getScaledVector)
     EXPECT_EQ_VECTORS(expectedVector,scaledVector);
 }
 
+TEST(VectorDotProduct,givenTwoVectors_getDotProduct)
+{
+    double x1{1};
+    double y1{2};
+    double z1{3};
+    double x2{2};
+    double y2{3};
+    double z2{1};
+    Vector3 firstVector{x1, y1, z1};
+    Vector3 secondVector{x2, y2, z2};
+    double expectedResult{11};
+    double dotProdutResult = firstVector.dot(secondVector);
+    EXPECT_DOUBLE_EQ(dotProdutResult,expectedResult);
+}

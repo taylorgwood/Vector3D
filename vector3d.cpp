@@ -25,6 +25,21 @@ double Vector3::get_z() const
     return m_z;
 }
 
+void Vector3::set_x(double x) const
+{
+    m_x = x;
+}
+
+void Vector3::set_y(double y) const
+{
+    m_y = y;
+}
+
+void Vector3::set_z(double z) const
+{
+    m_z = z;
+}
+
 Vector3 Vector3::operator+(const Vector3 &secondVector)
 {
     double x = get_x() + secondVector.get_x();
@@ -65,7 +80,7 @@ Vector3 Vector3::cross(Vector3 const &secondVector)
     return Vector3(x, y, z);
 }
 
-double Vector3::dot(Vector3 const &secondVector)
+double Vector3::dot(Vector3 secondVector)
 {
     double x = get_x()*secondVector.get_x();
     double y = get_y()*secondVector.get_y();
