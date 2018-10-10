@@ -1,19 +1,8 @@
 #include "physics.h"
-//#include "vector3d.h"
 
 PhysicsObject::~PhysicsObject()
 {
 }
-
-//PhysicsObject::PhysicsObject(double position, double velocity, double acceleration) : mPosition{position}, mVelocity{velocity}, mAcceleration{acceleration}
-//{
-//}
-
-//PhysicsObject::PhysicsObject()
-//{
-//    PhysicWorld physicsWorld;
-//    physicsWorld.create_world();
-//}
 
 double PhysicsObject::get_CoefficientOfRestitution() const
 {
@@ -90,18 +79,6 @@ void PhysicsObject::create_sphere(Vector3 shapeLocation, float sphereRadius, Vec
     mRadius = sphereRadius;
     mVelocity = initialVelocity;
 }
-
-//double get_timestep()
-//{
-//    double timestep{0.1};
-//    return timestep;
-//}
-
-//Vector3 calculate_collision()
-//{
-//    Vector3 next_v = -get_CoefficientOfRestitution()*get_v;
-//    return next_v;
-//}
 
 
 

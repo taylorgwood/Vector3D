@@ -1,6 +1,5 @@
 #ifndef VECTOR3D_H
 #define VECTOR3D_H
-//#include "physics.h"
 class PhysicsObject;
 
 class Vector3
@@ -9,10 +8,10 @@ public:
     ~Vector3();
 
     Vector3(double x, double y, double z);
-    double get_x() const; // done
+    double get_x() const;
     double get_y() const;
     double get_z() const;
-    void set_x(double const x); // decide if need
+    void set_x(double const x);
     void set_y(double const y);
     void set_z(double const z);
     Vector3 operator+(Vector3 const &secondVector);
