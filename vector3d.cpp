@@ -1,5 +1,6 @@
 #include "vector3d.h"
 #include "physicsObject.h"
+#include <cmath>
 
 Vector3::~Vector3()
 {
@@ -87,5 +88,14 @@ double Vector3::dot(Vector3 secondVector)
     double dotProduct;
     dotProduct = (x+y+z);
     return dotProduct;
+}
+
+Vector3 Vector3::vector_index_to_power(Vector3 inputVector, double power)
+{
+    double x = std::pow(get_x(),power);
+    double y = std::pow(get_y(),power);
+    double z = std::pow(get_z(),power);
+    Vector3 vectorToPower{x,y,z};
+    return vectorToPower;
 }
 

@@ -21,6 +21,7 @@ public:
 
     Vector3 cross(Vector3 const &secondVector);
     double dot(Vector3 secondVector);
+    Vector3 vector_index_to_power(Vector3 inputVector, double power);
 
 protected:
 

@@ -13,6 +13,7 @@ add_subdirectory(libs/googletest)
 ENDIF()
 
 set(TEST_NAME ${PROJECT_NAME}_UnitTest)
+
 add_library(${PROJECT_NAME} STATIC
     vector3d.h
     vector3d.cpp
@@ -21,3 +22,6 @@ add_library(${PROJECT_NAME} STATIC
 
 add_executable(${TEST_NAME} vector3d_unittests.cpp)
 target_link_libraries(${TEST_NAME} gtest gtest_main ${PROJECT_NAME})
+set(TEST_NAME2 PhysicsObject_UnitTest)
+add_executable(${TEST_NAME2} physicsobject_unittests.cpp)
+target_link_libraries(${TEST_NAME2} gtest gtest_main ${PROJECT_NAME})

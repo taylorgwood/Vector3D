@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "vector3d.h"
-#include "physicsObject.h"
+//#include "physicsObject.h"
 
 void EXPECT_EQ_VECTORS(const Vector3& firstVector, const Vector3& secondVector)
 {
@@ -85,3 +85,22 @@ TEST(VectorDotProduct,givenTwoVectors_getDotProduct)
     double dotProdutResult = firstVector.dot(secondVector);
     EXPECT_DOUBLE_EQ(dotProdutResult,expectedResult);
 }
+
+TEST(VectorPower,givenVectorAndPower_getVectorIndexesToPower)
+{
+    double x1{1};
+    double y1{0};
+    double z1{4};
+    Vector3 inputVector{x1, y1, z1};
+    double power{3};
+    double x2{1};
+    double y2{0};
+    double z2{64};
+    Vector3 expectedResult{x2, y2, z2};
+    Vector3 vectorToPower = inputVector.vector_index_to_power(inputVector,power);
+    EXPECT_EQ_VECTORS(vectorToPower,expectedResult);
+}
+
+
+
+

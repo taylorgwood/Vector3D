@@ -4,7 +4,15 @@ PhysicsObject::~PhysicsObject()
 {
 }
 
-double PhysicsObject::get_CoefficientOfRestitution() const
+PhysicsObject::PhysicsObject()
+{
+}
+
+PhysicsObject::PhysicsObject(Vector3 position, Vector3 velocity, Vector3 gravity): mPosition{position}, mVelocity{velocity}, mAcceleration{gravity}
+{
+}
+
+double PhysicsObject::get_coefficient_of_restitution() const
 {
     return mCoefficientOfRestitution;
 }
@@ -24,10 +32,44 @@ Vector3 PhysicsObject::get_acceleration() const
     return mAcceleration;
 }
 
+Vector3 PhysicsObject::get_gravity() const
+{
+    return mGravity;
+}
+
+void PhysicsObject::set_position(Vector3 const position)
+{
+   mPosition = position;
+}
+
+void PhysicsObject::set_velocity(Vector3 const velocity)
+{
+    mVelocity = velocity;
+}
+
+void PhysicsObject::set_acceleration(Vector3 const acceleration)
+{
+    mAcceleration = acceleration;
+}
+
+void PhysicsObject::set_gravity(Vector3 const gravity)
+{
+    mGravity = gravity;
+}
+
+void PhysicsObject::set_coefficient_of_restitution(double const coefficientOfRestitution)
+{
+    mCoefficientOfRestitution = coefficientOfRestitution;
+}
+
 Vector3 PhysicsObject::get_drag_force() const
 {
     Vector3 dragForce{0,0,0};
-    //dragForce = (1/2)*density*(get_v()*get_v())*get_CoefficientOfRestitution()*get_radius();
+    double fluidDensity = 1.275;
+    double dragCoefficient = 0.5;
+    Vector3 velocity = get_velocity();
+    Vector3 velocitySquared = velocity.vector_index_to_power(velocity,2);
+    dragForce = velocitySquared*(1/2)*fluidDensity*get_radius();
     return dragForce;
 }
 
@@ -46,7 +88,7 @@ void PhysicsObject::update(double timestep)
 {
     mPosition = get_position() + get_velocity()*timestep;
     mVelocity = get_velocity() + get_acceleration()*timestep;
-    mAcceleration = get_acceleration() + get_drag_force()/get_mass();
+    mAcceleration = get_acceleration() + get_gravity() + get_drag_force()/get_mass();
 }
 
 void PhysicsObject::box_collision()
