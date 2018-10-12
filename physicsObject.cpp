@@ -8,7 +8,7 @@ PhysicsObject::PhysicsObject()
 {
 }
 
-PhysicsObject::PhysicsObject(Vector3 position, Vector3 velocity, Vector3 gravity): mPosition{position}, mVelocity{velocity}, mAcceleration{gravity}
+PhysicsObject::PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration): mPosition{position}, mVelocity{velocity}, mAcceleration{acceleration}
 {
 }
 
@@ -39,7 +39,7 @@ Vector3 PhysicsObject::get_gravity() const
 
 void PhysicsObject::set_position(Vector3 const position)
 {
-   mPosition = position;
+    mPosition = position;
 }
 
 void PhysicsObject::set_velocity(Vector3 const velocity)
@@ -52,8 +52,12 @@ void PhysicsObject::set_acceleration(Vector3 const acceleration)
     mAcceleration = acceleration;
 }
 
-void PhysicsObject::set_gravity(Vector3 const gravity)
+void PhysicsObject::reset_gravity(Vector3 const gravity)
 {
+    Vector3 newAcceleration = mAcceleration-mGravity;
+    Vector3 newGravity = gravity;
+    newAcceleration = newAcceleration + gravity;
+    mAcceleration = newAcceleration;
     mGravity = gravity;
 }
 
@@ -86,9 +90,12 @@ double PhysicsObject::get_radius() const
 
 void PhysicsObject::update(double timestep)
 {
-    mPosition = get_position() + get_velocity()*timestep;
-    mVelocity = get_velocity() + get_acceleration()*timestep;
-    mAcceleration = get_acceleration() + get_gravity() + get_drag_force()/get_mass();
+    Vector3 newAcceleration = get_acceleration();
+    Vector3 newVelocity = get_velocity() + newAcceleration*timestep;
+    Vector3 newPosition = get_position() + newVelocity*timestep;
+    set_acceleration(newAcceleration);
+    set_velocity(newVelocity);
+    set_position(newPosition);
 }
 
 void PhysicsObject::box_collision()

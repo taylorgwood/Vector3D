@@ -38,14 +38,62 @@ TEST(Constructor,givenPhysicsValues_PhysicsPVAInitialized)
     EXPECT_EQ_VECTORS(physicsObject.get_acceleration(),acceleration);
 }
 
-TEST(Update,givenPhysicsObjectAndTimestep_getUpdatedPhysicsObject)
+TEST(Update,givenPhysicsObjectAtRestAndTimestep_getUpdatedPosition)
 {
     Vector3 position{0, 0, 0};
     Vector3 velocity{0, 0, 0};
-    Vector3 acceleration{0, 0, 0};
+    Vector3 gravity{0,0,-9.8};
+    Vector3 acceleration = gravity;
     PhysicsObject physicsObject(position, velocity, acceleration);
 
-    EXPECT_EQ_VECTORS(physicsObject.get_position(),position);
-    EXPECT_EQ_VECTORS(physicsObject.get_velocity(),velocity);
-    EXPECT_EQ_VECTORS(physicsObject.get_acceleration(),acceleration);
+    double timestep{0.1};
+    physicsObject.update(timestep);
+
+    Vector3 newPosition{0,0,-0.098};
+    Vector3 newVelocity{0,0,-0.98};
+    Vector3 newAcceleration{0,0,-9.8};
+
+    EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
 }
+
+TEST(Update,givenPhysicsObjectAtRestAndTwoTimesteps_getUpdatedPosition)
+{
+    Vector3 position{0, 0, 0};
+    Vector3 velocity{0, 0, 0};
+    Vector3 gravity{0,0,-9.8};
+    Vector3 acceleration = gravity;
+    PhysicsObject physicsObject(position, velocity, acceleration);
+
+    double timestep{0.1};
+    physicsObject.update(timestep);
+    physicsObject.update(timestep);
+
+    Vector3 newPosition{0,0,-0.294};
+
+    EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
+}
+
+TEST(Update,givenPhysicsObjectAtRestAndTenTimesteps_getUpdatedPosition)
+{
+    Vector3 position{0, 0, 0};
+    Vector3 velocity{0, 0, 0};
+    Vector3 gravity{0,0,-9.8};
+    Vector3 acceleration = gravity;
+    PhysicsObject physicsObject(position, velocity, acceleration);
+
+    double timestep{0.1};
+    for(int i=0; i<10; i++)
+    {
+        physicsObject.update(timestep);
+    }
+    Vector3 newPosition{0,0,-5.39};
+
+    EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
+}
+
+
+// turn off gravity
+// drag force
+// box collision without gravity
+// moveback function
+//

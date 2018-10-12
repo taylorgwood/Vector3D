@@ -8,7 +8,7 @@ class PhysicsObject
 public:
     ~PhysicsObject();
     PhysicsObject();
-    PhysicsObject(Vector3 position, Vector3 velocity, Vector3 gravity);
+    PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration);
 
     double get_coefficient_of_restitution() const;
     Vector3 get_position() const;
@@ -18,7 +18,7 @@ public:
     void set_position(Vector3 const position);
     void set_velocity(Vector3 const velocity);
     void set_acceleration(Vector3 const acceleration);
-    void set_gravity(Vector3 const gravity);
+    void reset_gravity(Vector3 const gravity);
     void set_coefficient_of_restitution(double const coefficientOfRestitution);
     Vector3 get_drag_force() const;
     double get_mass() const;
