@@ -9,6 +9,13 @@ void EXPECT_EQ_VECTORS(const Vector3& firstVector, const Vector3& secondVector)
     EXPECT_DOUBLE_EQ(firstVector.get_z(), secondVector.get_z());
 }
 
+void EXPECT_EQ_VECTORS_INT(const Vector3& firstVector, const Vector3& secondVector)
+{
+    EXPECT_EQ(firstVector.get_x(), secondVector.get_x());
+    EXPECT_EQ(firstVector.get_y(), secondVector.get_y());
+    EXPECT_EQ(firstVector.get_z(), secondVector.get_z());
+}
+
 TEST(Constructor,setNoValues_getZeroVector)
 {
     PhysicsObject physicsObject;
@@ -63,6 +70,8 @@ TEST(Update,givenPhysicsObjectAtRestAndTwoTimesteps_getUpdatedPosition)
     Vector3 gravity{0,0,-9.8};
     Vector3 acceleration = gravity;
     PhysicsObject physicsObject(position, velocity, acceleration);
+    bool turnOff{0};
+    physicsObject.toggle_drag_force(turnOff);
 
     double timestep{0.1};
     physicsObject.update(timestep);
@@ -80,6 +89,8 @@ TEST(Update,givenPhysicsObjectAtRestAndTenTimesteps_getUpdatedPosition)
     Vector3 gravity{0,0,-9.8};
     Vector3 acceleration = gravity;
     PhysicsObject physicsObject(position, velocity, acceleration);
+    bool turnOff{0};
+    physicsObject.toggle_drag_force(turnOff);
 
     double timestep{0.1};
     for(int i=0; i<10; i++)
@@ -91,9 +102,27 @@ TEST(Update,givenPhysicsObjectAtRestAndTenTimesteps_getUpdatedPosition)
     EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
 }
 
+TEST(DragForce,givenPhysicsObject_measureAccelerationAfterTenTimestep)
+{
+    PhysicsObject physicsObject;
+    bool turnOn{1};
+    physicsObject.toggle_drag_force(turnOn);
+    double timestep{0.01};
+    for(int i=0; i<10; i++)
+    {
+        physicsObject.update(timestep);
+    }
+    Vector3 calculatedAcceleration = physicsObject.calculate_drag_force();
+    Vector3 expectedAcceleration{0,0,0.9462891031687630};
+    EXPECT_EQ_VECTORS(expectedAcceleration,calculatedAcceleration);
+}
+
+
+
+
+
 
 // turn off gravity
-// drag force
 // box collision without gravity
 // moveback function
-//
+// make test fixture

@@ -15,17 +15,22 @@ public:
     Vector3 get_velocity() const;
     Vector3 get_acceleration() const;
     Vector3 get_gravity() const;
+//    Vector3 get_drag_force() const;
     void set_position(Vector3 const position);
     void set_velocity(Vector3 const velocity);
     void set_acceleration(Vector3 const acceleration);
     void reset_gravity(Vector3 const gravity);
     void set_coefficient_of_restitution(double const coefficientOfRestitution);
-    Vector3 get_drag_force() const;
+    void toggle_drag_force(bool onOff);
+    Vector3 calculate_drag_force();
+
     double get_mass() const;
-    double get_radius() const;
+    float get_radius() const;
     void update(double timestep);
     void box_collision();
     void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
+    void move_back();
+    void create_world();
 
 protected:
 
@@ -35,9 +40,10 @@ private:
     Vector3 mVelocity{0,0,0};
     Vector3 mAcceleration{0,0,0};
     Vector3 mGravity{0,0,-9.8};
-    double  mDragForce{0};
-    double  mMass{1};
-    double  mRadius{0};
+    Vector3 mDragForce{0,0,0};
+    bool    mDragForceOn{1};
+    double  mMass{10};
+    float   mRadius{1};
     double  mBoxSize{5};
 
 };

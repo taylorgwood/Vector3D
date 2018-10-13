@@ -92,10 +92,19 @@ double Vector3::dot(Vector3 secondVector)
 
 Vector3 Vector3::vector_index_to_power(Vector3 inputVector, double power)
 {
-    double x = std::pow(get_x(),power);
-    double y = std::pow(get_y(),power);
-    double z = std::pow(get_z(),power);
+    double x = std::pow(inputVector.get_x(),power);
+    double y = std::pow(inputVector.get_y(),power);
+    double z = std::pow(inputVector.get_z(),power);
     Vector3 vectorToPower{x,y,z};
     return vectorToPower;
+}
+
+Vector3 Vector3::normalize(Vector3 inputVector)
+{
+    double x = get_x();
+    double y = get_y();
+    double z = get_z();
+    double magnitude = sqrt(x*x+y*y+z*z);
+    return Vector3(x/magnitude,y/magnitude,z/magnitude);
 }
 

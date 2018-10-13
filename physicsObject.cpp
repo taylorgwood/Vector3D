@@ -6,6 +6,7 @@ PhysicsObject::~PhysicsObject()
 
 PhysicsObject::PhysicsObject()
 {
+    mAcceleration = mGravity;
 }
 
 PhysicsObject::PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration): mPosition{position}, mVelocity{velocity}, mAcceleration{acceleration}
@@ -37,6 +38,11 @@ Vector3 PhysicsObject::get_gravity() const
     return mGravity;
 }
 
+//Vector3 PhysicsObject::get_drag_force() const
+//{
+//    return mDragForce;
+//}
+
 void PhysicsObject::set_position(Vector3 const position)
 {
     mPosition = position;
@@ -66,14 +72,26 @@ void PhysicsObject::set_coefficient_of_restitution(double const coefficientOfRes
     mCoefficientOfRestitution = coefficientOfRestitution;
 }
 
-Vector3 PhysicsObject::get_drag_force() const
+void PhysicsObject::toggle_drag_force(bool onOff)
+{
+    mDragForceOn = onOff;
+}
+
+Vector3 PhysicsObject::calculate_drag_force()
 {
     Vector3 dragForce{0,0,0};
-    double fluidDensity = 1.275;
-    double dragCoefficient = 0.5;
-    Vector3 velocity = get_velocity();
-    Vector3 velocitySquared = velocity.vector_index_to_power(velocity,2);
-    dragForce = velocitySquared*(1/2)*fluidDensity*get_radius();
+    if(mDragForceOn)
+    {
+        double fluidDensity{1.275};
+        double dragCoefficient{0.5};
+        double pi{3.1416};
+        double areaCrossSectional = get_radius()*get_radius()*pi;
+        Vector3 velocity = get_velocity();
+        Vector3 velocitySquared = velocity.vector_index_to_power(velocity,2);
+        dragForce = velocitySquared*0.5*fluidDensity*dragCoefficient*areaCrossSectional;
+//        dragForce = velocity;
+    }
+//    mDragForce = dragForce;
     return dragForce;
 }
 
@@ -82,7 +100,7 @@ double PhysicsObject::get_mass() const
     return mMass;
 }
 
-double PhysicsObject::get_radius() const
+float PhysicsObject::get_radius() const
 {
     return mRadius;
 }
@@ -90,7 +108,8 @@ double PhysicsObject::get_radius() const
 
 void PhysicsObject::update(double timestep)
 {
-    Vector3 newAcceleration = get_acceleration();
+//    calculate_drag_force();
+    Vector3 newAcceleration = get_acceleration() + calculate_drag_force()/get_mass();
     Vector3 newVelocity = get_velocity() + newAcceleration*timestep;
     Vector3 newPosition = get_position() + newVelocity*timestep;
     set_acceleration(newAcceleration);
@@ -127,6 +146,14 @@ void PhysicsObject::create_sphere(Vector3 shapeLocation, float sphereRadius, Vec
     mPosition = shapeLocation;
     mRadius = sphereRadius;
     mVelocity = initialVelocity;
+}
+
+void PhysicsObject::move_back()
+{
+    //    double detectionSize = mBoxSize-get_radius();
+    //    mPosition.set_x(detectionSize);
+    //    mPosition.set_y(detectionSize);
+    //    mPosition.set_z(detectionSize);
 }
 
 

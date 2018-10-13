@@ -101,6 +101,19 @@ TEST(VectorPower,givenVectorAndPower_getVectorIndexesToPower)
     EXPECT_EQ_VECTORS(vectorToPower,expectedResult);
 }
 
+TEST(Normalize,givenVector_getNormalizedVector)
+{
+    double x1{1};
+    double y1{2};
+    double z1{4};
+    Vector3 inputVector{x1, y1, z1};
+    double x2{1/sqrt(21)};
+    double y2{2/sqrt(21)};
+    double z2{4/sqrt(21)};
+    Vector3 expectedResult{x2, y2, z2};
+    Vector3 normalizedVector = inputVector.normalize(inputVector);
+    EXPECT_EQ_VECTORS(normalizedVector,expectedResult);
+}
 
 
 
