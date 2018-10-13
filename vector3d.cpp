@@ -99,7 +99,7 @@ Vector3 Vector3::vector_index_to_power(Vector3 inputVector, double power)
     return vectorToPower;
 }
 
-Vector3 Vector3::normalize(Vector3 inputVector)
+Vector3 Vector3::normalize()
 {
     double x = get_x();
     double y = get_y();

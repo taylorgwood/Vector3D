@@ -111,7 +111,7 @@ TEST(Normalize,givenVector_getNormalizedVector)
     double y2{2/sqrt(21)};
     double z2{4/sqrt(21)};
     Vector3 expectedResult{x2, y2, z2};
-    Vector3 normalizedVector = inputVector.normalize(inputVector);
+    Vector3 normalizedVector = inputVector.normalize();
     EXPECT_EQ_VECTORS(normalizedVector,expectedResult);
 }
 

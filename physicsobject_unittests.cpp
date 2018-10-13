@@ -102,7 +102,7 @@ TEST(Update,givenPhysicsObjectAtRestAndTenTimesteps_getUpdatedPosition)
     EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
 }
 
-TEST(DragForce,givenPhysicsObject_measureAccelerationAfterTenTimestep)
+TEST(DragForce,givenPhysicsObject_getAccelerationAfterTenTimestep)
 {
     PhysicsObject physicsObject;
     bool turnOn{1};
@@ -117,6 +117,46 @@ TEST(DragForce,givenPhysicsObject_measureAccelerationAfterTenTimestep)
     EXPECT_EQ_VECTORS(expectedAcceleration,calculatedAcceleration);
 }
 
+TEST(MoveBack,givenSingleDirectionToMove_getNewPosition)
+{
+    Vector3 position{5, 0, 0};
+    Vector3 velocity{0, 0, 0};
+    Vector3 gravity{0,0,-9.8};
+    Vector3 acceleration = gravity;
+    PhysicsObject physicsObject(position, velocity, acceleration);
+    Vector3 directionToMove{-1,0,0};
+
+    physicsObject.move_back_from_wall(directionToMove);
+    Vector3 expectedPosition{4,0,0};
+
+    EXPECT_EQ_VECTORS(expectedPosition,physicsObject.get_position());
+}
+
+TEST(MoveBack,givenMultipleDirectionsToMove_getNewPosition)
+{
+    Vector3 position{5, 5, 0};
+    Vector3 velocity{0, 0, 0};
+    Vector3 gravity{0,0,-9.8};
+    Vector3 acceleration = gravity;
+    PhysicsObject physicsObject(position, velocity, acceleration);
+    Vector3 directionToMove{-1,-1,0};
+
+    physicsObject.move_back_from_wall(directionToMove);
+    Vector3 expectedPosition{4.292893218813452,4.292893218813452,0};
+
+    EXPECT_EQ_VECTORS(expectedPosition,physicsObject.get_position());
+}
+
+TEST(Gravity,givenTurnedOffGravity_getNewPosition)
+{
+    PhysicsObject physicsObject();
+    ouble timestep{0.01};
+    for(int i=0; i<10; i++)
+    {
+        physicsObject.update(timestep);
+    }
+
+}
 
 
 
@@ -124,5 +164,4 @@ TEST(DragForce,givenPhysicsObject_measureAccelerationAfterTenTimestep)
 
 // turn off gravity
 // box collision without gravity
-// moveback function
 // make test fixture

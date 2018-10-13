@@ -29,7 +29,7 @@ public:
     void update(double timestep);
     void box_collision();
     void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
-    void move_back();
+    void move_back_from_wall(Vector3 directionOfMove);
     void create_world();
 
 protected:
