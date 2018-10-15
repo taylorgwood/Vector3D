@@ -109,7 +109,7 @@ float PhysicsObject::get_radius() const
 void PhysicsObject::update(double timestep)
 {
     //    calculate_drag_force();
-    Vector3 newAcceleration = get_acceleration() + calculate_drag_force()/get_mass();
+    Vector3 newAcceleration = get_acceleration() - calculate_drag_force()/get_mass();
     Vector3 newVelocity = get_velocity() + newAcceleration*timestep;
     Vector3 newPosition = get_position() + newVelocity*timestep;
     set_acceleration(newAcceleration);
