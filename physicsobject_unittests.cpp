@@ -147,17 +147,47 @@ TEST(MoveBack,givenMultipleDirectionsToMove_getNewPosition)
     EXPECT_EQ_VECTORS(expectedPosition,physicsObject.get_position());
 }
 
-TEST(Gravity,givenTurnedOffGravity_getNewPosition)
+TEST(Bounce,givenXVelocityTowardWallNoGravity_getNegativeVelocity)
 {
-    PhysicsObject physicsObject();
-    ouble timestep{0.01};
-    for(int i=0; i<10; i++)
-    {
-        physicsObject.update(timestep);
-    }
+    Vector3 position{5, 0, 0};
+    Vector3 velocity{10, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    Vector3 acceleration = gravity;
+    PhysicsObject physicsObject(position, velocity, acceleration);
 
+    physicsObject.box_collision();
+    Vector3 expectedVelocity{-8,0,0};
+
+    EXPECT_EQ_VECTORS(expectedVelocity, physicsObject.get_velocity());
 }
 
+TEST(Bounce,givenZVelocityTowardWallNoGravity_getNegativeVelocity)
+{
+    Vector3 position{0, 0, 5};
+    Vector3 velocity{0, 0, 10};
+    Vector3 gravity{0, 0, 0};
+    Vector3 acceleration = gravity;
+    PhysicsObject physicsObject(position, velocity, acceleration);
+
+    physicsObject.box_collision();
+    Vector3 expectedVelocity{0,0,-8};
+
+    EXPECT_EQ_VECTORS(expectedVelocity, physicsObject.get_velocity());
+}
+
+TEST(Bounce,givenXYZVelocityTowardWallNoGravity_getNegativeVelocity)
+{
+    Vector3 position{5, -5, 5};
+    Vector3 velocity{1, -20, 1};
+    Vector3 gravity{0, 0, 0};
+    Vector3 acceleration = gravity;
+    PhysicsObject physicsObject(position, velocity, acceleration);
+
+    physicsObject.box_collision();
+    Vector3 expectedVelocity{-0.8,16,-0.8};
+
+    EXPECT_EQ_VECTORS(expectedVelocity, physicsObject.get_velocity());
+}
 
 
 

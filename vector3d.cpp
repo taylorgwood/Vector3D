@@ -108,3 +108,21 @@ Vector3 Vector3::normalize()
     return Vector3(x/magnitude,y/magnitude,z/magnitude);
 }
 
+double Vector3::max()
+{
+    double x = get_x();
+    double y = get_y();
+    double z = get_z();
+
+    double maxValue{x};
+    if (y>maxValue)
+    {
+        maxValue = y;
+    }
+    if (z>maxValue)
+    {
+        maxValue = z;
+    }
+    return maxValue;
+}
+

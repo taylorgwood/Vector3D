@@ -115,5 +115,15 @@ TEST(Normalize,givenVector_getNormalizedVector)
     EXPECT_EQ_VECTORS(normalizedVector,expectedResult);
 }
 
+TEST(Maximum,givenVector_findMaxValue)
+{
+    double x1{1};
+    double y1{-2};
+    double z1{4};
+    Vector3 inputVector{x1, y1, z1};
+    double expectedResult{z1};
+    double calculatedResult = inputVector.max();
+    EXPECT_DOUBLE_EQ(calculatedResult,expectedResult);
+}
 
 
