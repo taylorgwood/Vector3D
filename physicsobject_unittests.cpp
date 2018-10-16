@@ -10,13 +10,6 @@ void EXPECT_EQ_VECTORS(const Vector3& firstVector, const Vector3& secondVector)
     EXPECT_DOUBLE_EQ(firstVector.get_z(), secondVector.get_z());
 }
 
-void EXPECT_EQ_VECTORS_INT(const Vector3& firstVector, const Vector3& secondVector)
-{
-    EXPECT_EQ(firstVector.get_x(), secondVector.get_x());
-    EXPECT_EQ(firstVector.get_y(), secondVector.get_y());
-    EXPECT_EQ(firstVector.get_z(), secondVector.get_z());
-}
-
 TEST(Constructor,setNoValues_getZeroVector)
 {
     PhysicsObject physicsObject;
@@ -34,7 +27,7 @@ TEST(PositionGetterSetter,setPhysicsPosition_getCorrectPositionBack)
     EXPECT_EQ_VECTORS(positionInput,positionOutput);
 }
 
-TEST(Constructor,givenPhysicsValues_PhysicsPVAInitialized)
+TEST(Constructor,givenPhysicsValues_getPhysicsPVAInitialized)
 {
     Vector3 position{1, 2, 3};
     Vector3 velocity{6, 5, 4};
