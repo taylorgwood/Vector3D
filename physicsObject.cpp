@@ -163,12 +163,13 @@ void PhysicsObject::box_collision()
     }
 }
 
-//void PhysicsObject::create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity)
-//{
-//    mPosition = shapeLocation;
-//    mRadius = sphereRadius;
-//    mVelocity = initialVelocity;
-//}
+void PhysicsObject::create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity)
+{
+    mPosition = shapeLocation;
+    mRadius = sphereRadius;
+    mVelocity = initialVelocity;
+    //mCoefficientOfRestitution = coefficientOfRestitution;
+}
 
 void PhysicsObject::move_back_from_wall(Vector3 directionOfMove)
 {

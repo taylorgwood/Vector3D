@@ -102,7 +102,7 @@ TEST(Update,givenPhysicsObjectAtRestAndTenTimesteps_getUpdatedPosition)
     EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
 }
 
-TEST(DragForce,givenPhysicsObject_getAccelerationAfterTenTimestep)
+TEST(DragForce,givenPhysicsObject_getDragAfterTenTimestep)
 {
     PhysicsObject physicsObject;
     bool turnOn{1};
@@ -112,9 +112,9 @@ TEST(DragForce,givenPhysicsObject_getAccelerationAfterTenTimestep)
     {
         physicsObject.update(timestep);
     }
-    Vector3 calculatedAcceleration = physicsObject.calculate_drag_force();
-    Vector3 expectedAcceleration{0,0,0.9462891031687630};
-    EXPECT_EQ_VECTORS(expectedAcceleration,calculatedAcceleration);
+    Vector3 calculatedDrag = physicsObject.calculate_drag_force();
+    Vector3 expectedDrag{0,0,0.9774361795112330};
+    EXPECT_EQ_VECTORS(expectedDrag,calculatedDrag);
 }
 
 TEST(MoveBack,givenSingleDirectionToMove_getNewPosition)
