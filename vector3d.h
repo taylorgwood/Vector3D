@@ -24,6 +24,7 @@ public:
     Vector3 vector_index_to_power(Vector3 inputVector, double power);
     Vector3 normalize();
     double max();
+    Vector3 abs();
 
 protected:
 

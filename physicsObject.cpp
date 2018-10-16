@@ -109,12 +109,15 @@ float PhysicsObject::get_radius() const
 void PhysicsObject::update(double timestep)
 {
     //    calculate_drag_force();
+    //    box_collision();
     Vector3 newAcceleration = get_acceleration() - calculate_drag_force()/get_mass();
     Vector3 newVelocity = get_velocity() + newAcceleration*timestep;
     Vector3 newPosition = get_position() + newVelocity*timestep;
     set_acceleration(newAcceleration);
     set_velocity(newVelocity);
     set_position(newPosition);
+    box_collision();
+
 }
 
 void PhysicsObject::box_collision()
@@ -123,59 +126,74 @@ void PhysicsObject::box_collision()
     double coefficientOfRestitution{0.8};
 
     double detectionSize = boxSize-get_radius();
-
+//    Vector3 directionOfMove{0,0,0};
 
     if (mPosition.get_x() >= detectionSize)
     {
+//        Vector3 addDirection{-1,0,0};
+//        directionOfMove = directionOfMove + addDirection;
+        //        move_back_from_wall(directionOfMove);
         mPosition.set_x(detectionSize);
+        double velocityAfterBounce{-mVelocity.get_x()*coefficientOfRestitution};
+        mVelocity.set_x(velocityAfterBounce);
+    }
+    else if (mPosition.get_x() <= -detectionSize)
+    {
+        //        Vector3 directionOfMove{1,0,0};
+        //        move_back_from_wall(directionOfMove);
+        mPosition.set_x(-detectionSize);
         double velocityAfterBounce{-mVelocity.get_x()*coefficientOfRestitution};
         mVelocity.set_x(velocityAfterBounce);
     }
     if(mPosition.get_y() >= detectionSize)
     {
+        //        Vector3 directionOfMove{0,-1,0};
+        //        move_back_from_wall(directionOfMove);
         mPosition.set_y(detectionSize);
+        double velocityAfterBounce{-mVelocity.get_y()*coefficientOfRestitution};
+        mVelocity.set_y(velocityAfterBounce);
+    }
+    else if(mPosition.get_y() <= -detectionSize)
+    {
+        //        Vector3 directionOfMove{0,1,0};
+        //        move_back_from_wall(directionOfMove);
+        mPosition.set_y(-detectionSize);
         double velocityAfterBounce{-mVelocity.get_y()*coefficientOfRestitution};
         mVelocity.set_y(velocityAfterBounce);
     }
     if(mPosition.get_z() >= detectionSize)
     {
-        mPosition.set_z(detectionSize);
+//        Vector3 directionOfMove{0,0,-1};
+//        move_back_from_wall(directionOfMove);
+                mPosition.set_z(detectionSize);
         double velocityAfterBounce{-mVelocity.get_z()*coefficientOfRestitution};
         mVelocity.set_z(velocityAfterBounce);
     }
-    if (mPosition.get_x() <= -detectionSize)
+    else if(mPosition.get_z() <= -detectionSize)
     {
-        mPosition.set_x(-detectionSize);
-        double velocityAfterBounce{-mVelocity.get_x()*coefficientOfRestitution};
-        mVelocity.set_x(velocityAfterBounce);
-    }
-    if(mPosition.get_y() <= -detectionSize)
-    {
-        mPosition.set_y(-detectionSize);
-        double velocityAfterBounce{-mVelocity.get_y()*coefficientOfRestitution};
-        mVelocity.set_y(velocityAfterBounce);
-    }
-    if(mPosition.get_z() <= -detectionSize)
-    {
-        mPosition.set_z(-detectionSize);
+//        Vector3 directionOfMove{0,0,1};
+//        move_back_from_wall(directionOfMove);
+                mPosition.set_z(-detectionSize);
         double velocityAfterBounce{-mVelocity.get_z()*coefficientOfRestitution};
         mVelocity.set_z(velocityAfterBounce);
     }
+//        Vector3 velocityAfterBounce = get_velocity()*-1*coefficientOfRestitution;
+//        mVelocity = directionOfMove.abs()*velocityAfterBounce;
 }
 
-void PhysicsObject::create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity)
+void PhysicsObject::create_sphere(Vector3 shapePosition, float sphereRadius, Vector3 initialVelocity)
 {
-    mPosition = shapeLocation;
     mRadius = sphereRadius;
-    mVelocity = initialVelocity;
+    PhysicsObject sphere(shapePosition, initialVelocity, mGravity);
     //mCoefficientOfRestitution = coefficientOfRestitution;
 }
 
 void PhysicsObject::move_back_from_wall(Vector3 directionOfMove)
 {
-    directionOfMove = directionOfMove.normalize();
-    Vector3 moveDistance = directionOfMove*get_radius();
-    Vector3 newPosition = get_position()+moveDistance;
+    double detectionSize = mBoxSize-get_radius();
+//    directionOfMove = directionOfMove.normalize();
+    Vector3 newPosition = directionOfMove*(-1*detectionSize);
+    //    Vector3 newPosition = get_position()+moveDistance;
     set_position(newPosition);
 }
 

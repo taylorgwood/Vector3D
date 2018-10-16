@@ -126,4 +126,15 @@ TEST(Maximum,givenVector_findMaxValue)
     EXPECT_DOUBLE_EQ(calculatedResult,expectedResult);
 }
 
+TEST(AbsoluteValue,givenVector_findAbsoluteValue)
+{
+    double x1{0};
+    double y1{-2};
+    double z1{3.19};
+    Vector3 inputVector{x1, y1, z1};
+    Vector3 expectedResult{0,2,3.19};
+    Vector3 calculatedResult = inputVector.abs();
+    EXPECT_EQ_VECTORS(calculatedResult,expectedResult);
+}
+
 

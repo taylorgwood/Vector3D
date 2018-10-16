@@ -126,3 +126,23 @@ double Vector3::max()
     return maxValue;
 }
 
+Vector3 Vector3::abs()
+{
+    double x = get_x();
+    double y = get_y();
+    double z = get_z();
+    if(x<0)
+    {
+        x = -x;
+    }
+    if(y<0)
+    {
+        y = -y;
+    }
+    if(z<0)
+    {
+        z = -z;
+    }
+    return Vector3(x,y,z);
+
+}
