@@ -87,7 +87,7 @@ TEST(DragForce,givenPhysicsObject_getDragAfterFourTimestep)
         physicsObject.update(timestep);
     }
     double calculatedDrag = physicsObject.calculate_drag_force().get_z();
-    double expectedDrag{0.1538315};
+    double expectedDrag{0.153839};
     EXPECT_NEAR(expectedDrag,calculatedDrag, 0.00001);
 }
 
@@ -102,8 +102,8 @@ TEST(DragForce,givenPhysicsObject_getAccelerationAfterTenTimestep)
         physicsObject.update(timestep);
     }
     double calculatedAcceleration = physicsObject.get_acceleration().get_z();
-    double expectedAcceleartion{-9.52699};
-    EXPECT_NEAR(expectedAcceleartion,calculatedAcceleration, 0.00001);
+    double expectedAcceleartion{-9.72234};
+    EXPECT_NEAR(expectedAcceleartion,calculatedAcceleration, 0.0001);
 }
 
 TEST(MoveBack,givenNegativeDirectionToMove_getNewPosition)
