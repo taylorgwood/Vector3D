@@ -1,4 +1,5 @@
 #include "physicsObject.h"
+#include "physicsworld.h"
 
 PhysicsObject::~PhysicsObject()
 {
@@ -38,6 +39,11 @@ Vector3 PhysicsObject::get_gravity() const
     return mGravity;
 }
 
+double PhysicsObject::get_fluid_density() const
+{
+    return mFluidDensity;
+}
+
 void PhysicsObject::set_position(Vector3 const position)
 {
     mPosition = position;
@@ -72,6 +78,11 @@ void PhysicsObject::set_radius(float const radius)
     mRadius = radius;
 }
 
+void PhysicsObject::set_mass(float const mass)
+{
+    mMass = mass;
+}
+
 void PhysicsObject::toggle_drag_force(bool onOff)
 {
     mDragForceOn = onOff;
@@ -82,7 +93,7 @@ Vector3 PhysicsObject::calculate_drag_force()
     Vector3 dragForce{0,0,0};
     if(mDragForceOn)
     {
-        double fluidDensity{1.275};
+        double fluidDensity = mFluidDensity;
         double dragCoefficient{0.5};
         double pi{3.1416};
         double areaCrossSectional = get_radius()*get_radius()*pi;
@@ -116,7 +127,6 @@ float PhysicsObject::get_radius() const
 {
     return mRadius;
 }
-
 
 void PhysicsObject::update(double timestep)
 {   
