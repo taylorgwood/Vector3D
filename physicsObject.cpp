@@ -122,19 +122,22 @@ void PhysicsObject::update(double timestep)
 {
     //    calculate_drag_force();
     //    box_collision();
+
     Vector3 newPosition = get_position() + get_velocity()*timestep;
+           box_collision();
     Vector3 newVelocity = get_velocity() + get_acceleration()*timestep;
     Vector3 newAcceleration = get_gravity() + calculate_drag_force()/get_mass();
     set_acceleration(newAcceleration);
     set_velocity(newVelocity);
     set_position(newPosition);
-    box_collision();
+
+
 }
 
 void PhysicsObject::box_collision()
 {
     double boxSize = mBoxSize;
-    double coefficientOfRestitution{0.8};
+    double coefficientOfRestitution = mCoefficientOfRestitution;
 
     double detectionSize = boxSize-get_radius();
     if (mPosition.get_x() >= detectionSize)
@@ -173,16 +176,14 @@ void PhysicsObject::box_collision()
         double velocityAfterBounce{-mVelocity.get_z()*coefficientOfRestitution};
         mVelocity.set_z(velocityAfterBounce);
     }
-    //        Vector3 velocityAfterBounce = get_velocity()*-1*coefficientOfRestitution;
-    //        mVelocity = directionOfMove.abs()*velocityAfterBounce;
 }
 
-void PhysicsObject::create_sphere(Vector3 shapePosition, float sphereRadius, Vector3 initialVelocity)
-{
-    mRadius = sphereRadius;
-    PhysicsObject sphere(shapePosition, initialVelocity, mGravity);
-    //mCoefficientOfRestitution = coefficientOfRestitution;
-}
+//void PhysicsObject::create_sphere(Vector3 shapePosition, float sphereRadius, Vector3 initialVelocity)
+//{
+//    mRadius = sphereRadius;
+//    PhysicsObject sphere(shapePosition, initialVelocity, mGravity);
+//    //mCoefficientOfRestitution = coefficientOfRestitution;
+//}
 
 void PhysicsObject::move_back_from_wall(Vector3 directionOfMove)
 {
