@@ -124,14 +124,13 @@ void PhysicsObject::update(double timestep)
 {
     //    calculate_drag_force();
     //    box_collision();
-    Vector3 newAcceleration = get_acceleration(); // - calculate_drag_force()/get_mass();
-    Vector3 newVelocity = get_velocity() + newAcceleration*timestep;
-    Vector3 newPosition = get_position() + newVelocity*timestep;
+    Vector3 newPosition = get_position() + get_velocity()*timestep;
+    Vector3 newVelocity = get_velocity() + get_acceleration()*timestep;
+    Vector3 newAcceleration = get_acceleration() + calculate_drag_force()/get_mass();
     set_acceleration(newAcceleration);
     set_velocity(newVelocity);
     set_position(newPosition);
     box_collision();
-
 }
 
 void PhysicsObject::box_collision()

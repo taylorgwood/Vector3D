@@ -50,7 +50,7 @@ TEST(Update,givenPhysicsObjectAtRestAndTimestep_getUpdatedPosition)
     double timestep{0.1};
     physicsObject.update(timestep);
 
-    Vector3 newPosition{0,0,-0.098};
+    Vector3 newPosition{0,0,0};
     Vector3 newVelocity{0,0,-0.98};
     Vector3 newAcceleration{0,0,-9.8};
 
@@ -71,32 +71,27 @@ TEST(Update,givenPhysicsObjectAtRestAndTwoTimesteps_getUpdatedPosition)
     physicsObject.update(timestep);
     physicsObject.update(timestep);
 
-    Vector3 newPosition{0,0,-0.294};
+    Vector3 newPosition{0,0,-0.098};
 
     EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
 }
 
-TEST(Update,givenPhysicsObjectAtRestAndTenTimesteps_getUpdatedPosition)
+TEST(DragForce,givenPhysicsObject_getDragAfterFourTimestep)
 {
-    Vector3 position{0, 0, 0};
-    Vector3 velocity{0, 0, 0};
-    Vector3 gravity{0,0,-9.8};
-    Vector3 acceleration = gravity;
-    PhysicsObject physicsObject(position, velocity, acceleration);
-    bool turnOff{0};
-    physicsObject.toggle_drag_force(turnOff);
-
+    PhysicsObject physicsObject;
+    bool turnOn{1};
+    physicsObject.toggle_drag_force(turnOn);
     double timestep{0.01};
-    for(int i=0; i<10; i++)
+    for(int i=0; i<4; i++)
     {
         physicsObject.update(timestep);
     }
-    Vector3 newPosition{0,0,-0.0539};
-
-    EXPECT_EQ_VECTORS(physicsObject.get_position(),newPosition);
+    double calculatedDrag = physicsObject.calculate_drag_force().get_z();
+    double expectedDrag{0.1538315};
+    EXPECT_NEAR(expectedDrag,calculatedDrag, 0.00001);
 }
 
-TEST(DragForce,givenPhysicsObject_getDragAfterTenTimestep)
+TEST(DragForce,givenPhysicsObject_getAccelerationAfterTenTimestep)
 {
     PhysicsObject physicsObject;
     bool turnOn{1};
@@ -106,9 +101,9 @@ TEST(DragForce,givenPhysicsObject_getDragAfterTenTimestep)
     {
         physicsObject.update(timestep);
     }
-    Vector3 calculatedDrag = physicsObject.calculate_drag_force();
-    Vector3 expectedDrag{0,0,0.9774361795112330};
-    EXPECT_EQ_VECTORS(expectedDrag,calculatedDrag);
+    double calculatedAcceleration = physicsObject.get_acceleration().get_z();
+    double expectedAcceleartion{-9.52699};
+    EXPECT_NEAR(expectedAcceleartion,calculatedAcceleration, 0.00001);
 }
 
 TEST(MoveBack,givenNegativeDirectionToMove_getNewPosition)
