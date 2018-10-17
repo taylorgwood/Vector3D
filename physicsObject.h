@@ -21,6 +21,7 @@ public:
     void set_acceleration(Vector3 const acceleration);
     void reset_gravity(Vector3 const gravity);
     void set_coefficient_of_restitution(double const coefficientOfRestitution);
+    void set_radius(const float radius);
     void toggle_drag_force(bool onOff);
     Vector3 calculate_drag_force();
 

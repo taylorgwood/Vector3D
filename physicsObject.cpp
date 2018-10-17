@@ -38,11 +38,6 @@ Vector3 PhysicsObject::get_gravity() const
     return mGravity;
 }
 
-//Vector3 PhysicsObject::get_drag_force() const
-//{
-//    return mDragForce;
-//}
-
 void PhysicsObject::set_position(Vector3 const position)
 {
     mPosition = position;
@@ -70,6 +65,11 @@ void PhysicsObject::reset_gravity(Vector3 const gravity)
 void PhysicsObject::set_coefficient_of_restitution(double const coefficientOfRestitution)
 {
     mCoefficientOfRestitution = coefficientOfRestitution;
+}
+
+void PhysicsObject::set_radius(float const radius)
+{
+    mRadius = radius;
 }
 
 void PhysicsObject::toggle_drag_force(bool onOff)
@@ -103,9 +103,7 @@ Vector3 PhysicsObject::calculate_drag_force()
         }
 
         dragForce = velocitySquared*0.5*fluidDensity*dragCoefficient*areaCrossSectional;
-        //        dragForce = velocity;
     }
-    //    mDragForce = dragForce;
     return dragForce;
 }
 
