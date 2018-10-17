@@ -24,8 +24,8 @@ public:
     void reset_gravity(Vector3 const gravity);
     void set_coefficient_of_restitution(double const coefficientOfRestitution);
     void set_radius(float const radius);
-    void set_mass(float const mass);
-    void set_fluid_density(float const fluidDensity);
+    void set_mass(double const mass);
+    void set_fluid_density(double const fluidDensity);
     void toggle_drag_force(bool onOff);
     Vector3 calculate_drag_force();
 
@@ -35,7 +35,6 @@ public:
     void box_collision();
     void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
     void move_back_from_wall(Vector3 directionOfMove);
-//    void create_world();
 
 protected:
 

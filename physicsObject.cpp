@@ -23,6 +23,7 @@ PhysicsObject::PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceler
     set_mass(mass);
     set_coefficient_of_restitution(cOfR);
     set_fluid_density(fluidDensity);
+    reset_gravity(acceleration);
 }
 
 double PhysicsObject::get_coefficient_of_restitution() const
@@ -89,12 +90,12 @@ void PhysicsObject::set_radius(float const radius)
     mRadius = radius;
 }
 
-void PhysicsObject::set_mass(float const mass)
+void PhysicsObject::set_mass(const double mass)
 {
     mMass = mass;
 }
 
-void PhysicsObject::set_fluid_density(float const fluidDensity)
+void PhysicsObject::set_fluid_density(const double fluidDensity)
 {
     mFluidDensity = fluidDensity;
 }
