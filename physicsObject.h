@@ -10,7 +10,7 @@ public:
     ~PhysicsObject();
     PhysicsObject();
     PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration);
-
+    PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration, float radius, double mass, double cOfR, double fluidDensity);
     double  get_coefficient_of_restitution() const;
     Vector3 get_position() const;
     Vector3 get_velocity() const;
@@ -25,6 +25,7 @@ public:
     void set_coefficient_of_restitution(double const coefficientOfRestitution);
     void set_radius(float const radius);
     void set_mass(float const mass);
+    void set_fluid_density(float const fluidDensity);
     void toggle_drag_force(bool onOff);
     Vector3 calculate_drag_force();
 
