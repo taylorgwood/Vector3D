@@ -144,5 +144,24 @@ Vector3 Vector3::abs()
         z = -z;
     }
     return Vector3(x,y,z);
+}
 
+Vector3 Vector3::sign()
+{
+    double signX{1};
+    double signY{1};
+    double signZ{1};
+    if(get_x()<0)
+    {
+        signX = -1;
+    }
+    if(get_y()<0)
+    {
+        signY = -1;
+    }
+    if(get_z()<0)
+    {
+        signZ = -1;
+    }
+    return Vector3(signX,signY,signZ);
 }

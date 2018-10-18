@@ -25,6 +25,7 @@ public:
     Vector3 normalize();
     double max();
     Vector3 abs();
+    Vector3 sign();
 
 protected:
 

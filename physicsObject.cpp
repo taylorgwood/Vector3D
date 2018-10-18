@@ -159,42 +159,47 @@ void PhysicsObject::update(double timestep)
 void PhysicsObject::box_collision()
 {
     double boxSize = mBoxSize;
-    double coefficientOfRestitution = mCoefficientOfRestitution;
+    double x{1};
+    double y{2};
+    double z{3};
 
     double detectionSize = boxSize-get_radius();
-    if (mPosition.get_x() >= detectionSize)
+    if (mPosition.get_x() >= detectionSize || mPosition.get_x() <= -detectionSize)
     {
-        mPosition.set_x(detectionSize);
+        mPosition.set_x(detectionSize*mPosition.sign().get_x());
+        set_velocity_after_bounce(1);
+    }
+    if(mPosition.get_y() >= detectionSize || mPosition.get_y() <= -detectionSize)
+    {
+        mPosition.set_y(detectionSize*mPosition.sign().get_y());
+        set_velocity_after_bounce(2);
+    }
+    if(mPosition.get_z() >= detectionSize ||mPosition.get_z() <= -detectionSize )
+    {
+        mPosition.set_z(detectionSize*mPosition.sign().get_z());
+        set_velocity_after_bounce(3);
+    }
+}
+
+void PhysicsObject::set_velocity_after_bounce(double direction)
+{
+    int x{1};
+    int y{2};
+    int z{3};
+    double coefficientOfRestitution = mCoefficientOfRestitution;
+
+    if (direction == x)
+    {
         double velocityAfterBounce{-mVelocity.get_x()*coefficientOfRestitution};
         mVelocity.set_x(velocityAfterBounce);
     }
-    else if (mPosition.get_x() <= -detectionSize)
+    else if (direction == y)
     {
-        mPosition.set_x(-detectionSize);
-        double velocityAfterBounce{-mVelocity.get_x()*coefficientOfRestitution};
-        mVelocity.set_x(velocityAfterBounce);
-    }
-    if(mPosition.get_y() >= detectionSize)
-    {
-        mPosition.set_y(detectionSize);
         double velocityAfterBounce{-mVelocity.get_y()*coefficientOfRestitution};
         mVelocity.set_y(velocityAfterBounce);
     }
-    else if(mPosition.get_y() <= -detectionSize)
+    else if (direction == z)
     {
-        mPosition.set_y(-detectionSize);
-        double velocityAfterBounce{-mVelocity.get_y()*coefficientOfRestitution};
-        mVelocity.set_y(velocityAfterBounce);
-    }
-    if(mPosition.get_z() >= detectionSize)
-    {
-        mPosition.set_z(detectionSize);
-        double velocityAfterBounce{-mVelocity.get_z()*coefficientOfRestitution};
-        mVelocity.set_z(velocityAfterBounce);
-    }
-    else if(mPosition.get_z() <= -detectionSize)
-    {
-        mPosition.set_z(-detectionSize);
         double velocityAfterBounce{-mVelocity.get_z()*coefficientOfRestitution};
         mVelocity.set_z(velocityAfterBounce);
     }
@@ -204,15 +209,12 @@ void PhysicsObject::create_sphere(Vector3 shapePosition, float sphereRadius, Vec
 {
     mRadius = sphereRadius;
     PhysicsObject sphere(shapePosition, initialVelocity, mGravity);
-    //mCoefficientOfRestitution = coefficientOfRestitution;
 }
 
 void PhysicsObject::move_back_from_wall(Vector3 directionOfMove)
 {
     double detectionSize = mBoxSize-get_radius();
-    //    directionOfMove = directionOfMove.normalize();
     Vector3 newPosition = directionOfMove*(-1*detectionSize);
-    //    Vector3 newPosition = get_position()+moveDistance;
     set_position(newPosition);
 }
 

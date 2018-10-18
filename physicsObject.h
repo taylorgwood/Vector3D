@@ -35,6 +35,7 @@ public:
     void box_collision();
     void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
     void move_back_from_wall(Vector3 directionOfMove);
+    void set_velocity_after_bounce(double direction);
 
 protected:
 
