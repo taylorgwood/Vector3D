@@ -132,9 +132,16 @@ TEST(AbsoluteValue,givenVector_findAbsoluteValue)
     double y1{-2};
     double z1{3.19};
     Vector3 inputVector{x1, y1, z1};
-    Vector3 expectedResult{0,2,3.19};
+    Vector3 expectedResult{0, 2, 3.19};
     Vector3 calculatedResult = inputVector.abs();
     EXPECT_EQ_VECTORS(calculatedResult,expectedResult);
 }
 
+TEST(Sign,givenVector_getSignsOfVector)
+{
+    Vector3 inputVector{2, -5, 0};
+    Vector3 expectedResult{1, -1, 0};
+    Vector3 calculatedResult = inputVector.sign();
+    EXPECT_EQ_VECTORS(calculatedResult,expectedResult);
+}
 

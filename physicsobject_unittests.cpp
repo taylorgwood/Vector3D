@@ -233,7 +233,123 @@ TEST(Bounce,givenYVelocityAtWallNoDrag_getCorrectLocationAfterTwoTimesteps)
     EXPECT_DOUBLE_EQ(expectedPosition, physicsObject.get_position().get_y());
 }
 
+TEST(SphereCollision,givenTwoIdenticalSpheres_getCorrectVelocities)
+{
+    Vector3 position1{0, 0, 0};
+    Vector3 position2{1, 0, 0};
+    Vector3 velocity1{1, 0, 0};
+    Vector3 velocity2{-1, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
 
-// turn off gravity
-// box collision without gravity
-// make test fixture
+    PhysicsObject object1(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject object2(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+
+    Vector3 calculatedVelocity2 = object1.sphere_collision(object2);
+    Vector3 calculatedVelocity1 = object1.get_velocity();
+    Vector3 expectedVelocity1{-0.8,0,0};
+    Vector3 expectedVelocity2{0.8,0,0};
+
+    EXPECT_EQ_VECTORS(expectedVelocity1,calculatedVelocity1);
+    EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
+}
+
+TEST(SphereCollision,givenTwoSpheres_getCorrectCollision)
+{
+    Vector3 position1{0, 0, 0};
+    Vector3 position2{1, 0, 0};
+    Vector3 velocity1{1, 0, 0};
+    Vector3 velocity2{-1, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass1{1};
+    double mass2{2};
+    double cOfR{1.0};
+    double fluidDensity{0};
+
+    PhysicsObject object1(position1,velocity1,gravity,radius,mass1,cOfR,fluidDensity);
+    PhysicsObject object2(position2,velocity2,gravity,radius,mass2,cOfR,fluidDensity);
+
+    double calculatedVelocity2 = object1.sphere_collision(object2).get_x();
+    double calculatedVelocity1 = object1.get_velocity().get_x();
+    double expectedVelocity1{-1.6666};
+    double expectedVelocity2{0.33333};
+
+    EXPECT_NEAR(expectedVelocity1,calculatedVelocity1,0.0001);
+    EXPECT_NEAR(expectedVelocity2,calculatedVelocity2,0.0001);
+}
+
+TEST(SeperateSpheres,givenTwoSpheresCollided_getCorrectPosition)
+{
+    Vector3 position1{2, 0, 0};
+    Vector3 position2{0.25, 0, 0};
+    Vector3 velocity{1, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject object1(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject object2(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
+
+    object1.move_spheres_apart(object2);
+    Vector3 calculatedPosition1 = object1.get_position();
+    Vector3 calculatedPosition2 = position2;
+    Vector3 expectedPosition1{2.25, 0, 0};
+    Vector3 expectedPosition2{0.25, 0, 0};
+
+    EXPECT_EQ_VECTORS(expectedPosition1,calculatedPosition1);
+    EXPECT_EQ_VECTORS(expectedPosition2,calculatedPosition2);
+}
+
+TEST(SeperateSpheres,givenTwoSpheresApart_getCorrectPosition)
+{
+    Vector3 position1{3, 0, 0};
+    Vector3 position2{0.25, 0, 0};
+    Vector3 velocity{1, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject object1(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject object2(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
+
+    object1.move_spheres_apart(object2);
+    Vector3 calculatedPosition1 = object1.get_position();
+    Vector3 calculatedPosition2 = position2;
+    Vector3 expectedPosition1{3, 0, 0};
+    Vector3 expectedPosition2{0.25, 0, 0};
+
+    EXPECT_EQ_VECTORS(expectedPosition1,calculatedPosition1);
+    EXPECT_EQ_VECTORS(expectedPosition2,calculatedPosition2);
+}
+
+TEST(SeperateSpheres,givenTwoSpheresCollidedAcrossZero_getCorrectPosition)
+{
+    Vector3 position1{1.5, 0, 0};
+    Vector3 position2{-0.25, 0, 0};
+    Vector3 velocity{1, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject object1(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject object2(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
+
+    object1.move_spheres_apart(object2);
+    Vector3 calculatedPosition1 = object1.get_position();
+    Vector3 calculatedPosition2 = position2;
+    Vector3 expectedPosition1{1.75, 0, 0};
+    Vector3 expectedPosition2{-0.25, 0, 0};
+
+    EXPECT_EQ_VECTORS(expectedPosition1,calculatedPosition1);
+    EXPECT_EQ_VECTORS(expectedPosition2,calculatedPosition2);
+}

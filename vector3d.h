@@ -23,6 +23,7 @@ public:
     double dot(Vector3 secondVector);
     Vector3 vector_index_to_power(Vector3 inputVector, double power);
     Vector3 normalize();
+    double get_magnitude();
     double max();
     Vector3 abs();
     Vector3 sign();

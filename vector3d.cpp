@@ -101,11 +101,17 @@ Vector3 Vector3::vector_index_to_power(Vector3 inputVector, double power)
 
 Vector3 Vector3::normalize()
 {
+    double magnitude = get_magnitude();
+    return Vector3(get_x()/magnitude,get_y()/magnitude,get_z()/magnitude);
+}
+
+double Vector3::get_magnitude()
+{
     double x = get_x();
     double y = get_y();
     double z = get_z();
     double magnitude = sqrt(x*x+y*y+z*z);
-    return Vector3(x/magnitude,y/magnitude,z/magnitude);
+    return magnitude;
 }
 
 double Vector3::max()
@@ -162,6 +168,18 @@ Vector3 Vector3::sign()
     if(get_z()<0)
     {
         signZ = -1;
+    }
+    if(get_x() == 0)
+    {
+        signX = 0;
+    }
+    if(get_y() == 0)
+    {
+        signY = 0;
+    }
+    if(get_z() == 0)
+    {
+        signZ = 0;
     }
     return Vector3(signX,signY,signZ);
 }

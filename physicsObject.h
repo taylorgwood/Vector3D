@@ -11,6 +11,7 @@ public:
     PhysicsObject();
     PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration);
     PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration, float radius, double mass, double cOfR, double fluidDensity);
+//    PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration, float radius, double mass, double cOfR, double fluidDensity);
     double  get_coefficient_of_restitution() const;
     Vector3 get_position() const;
     Vector3 get_velocity() const;
@@ -36,6 +37,8 @@ public:
     void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
     void move_back_from_wall(Vector3 directionOfMove);
     void set_velocity_after_bounce(double direction);
+    Vector3 sphere_collision(PhysicsObject object2);
+    void move_spheres_apart(PhysicsObject object2);
 
 protected:
 

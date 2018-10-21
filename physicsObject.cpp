@@ -218,5 +218,39 @@ void PhysicsObject::move_back_from_wall(Vector3 directionOfMove)
     set_position(newPosition);
 }
 
+Vector3 PhysicsObject::sphere_collision(PhysicsObject object2)
+{
+    Vector3 position1 = get_position();
+    Vector3 position2 = object2.get_position();
+    Vector3 velocity1 = get_velocity();
+    Vector3 velocity2 = object2.get_velocity();
+    double cOfR1 = get_coefficient_of_restitution();
+    double cOfR2 = object2.get_coefficient_of_restitution();
+    double mass1 = get_mass();
+    double mass2 = object2.get_mass();
+    double velocity1MassRatio = (2*mass2/(mass1 + mass2));
+    double velocity2MassRatio = (2*mass1/(mass1 + mass2));
+    double positionMagnitude = (position1-position2).get_magnitude();
+    double velocity1DotProduct = (velocity1-velocity2).dot(position1-position2);
+    double velocity2DotProduct = (velocity2-velocity1).dot(position2-position1);
+
+    Vector3 newVelocity1 = (velocity1 - (position1-position2)*velocity1MassRatio/(positionMagnitude*positionMagnitude)*velocity1DotProduct)*cOfR1;
+    Vector3 newVelocity2 = (velocity2 - (position2-position1)*velocity2MassRatio/(positionMagnitude*positionMagnitude)*velocity2DotProduct)*cOfR2;
+    set_velocity(newVelocity1);
+    return newVelocity2;
+}
 
 
+void PhysicsObject::move_spheres_apart(PhysicsObject object2)
+{
+    Vector3 positionDifference = (get_position() - object2.get_position());
+    double interferenceLimit = (get_radius() + object2.get_radius());
+    double interferenceDistance = interferenceLimit - positionDifference.get_magnitude();
+
+    if (interferenceDistance > 0)
+    {
+        Vector3 directionOfMove = positionDifference.normalize();
+        Vector3 newPosition = directionOfMove*(interferenceDistance);
+        set_position(get_position() + newPosition);
+    }
+}
