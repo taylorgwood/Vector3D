@@ -228,7 +228,6 @@ void PhysicsObject::sphere_collision(PhysicsObject* object2)
 {
     set_new_sphere_velocities(object2);
     move_spheres_apart(object2);
-
 }
 
 void PhysicsObject::set_new_sphere_velocities(PhysicsObject* object2)
@@ -251,13 +250,41 @@ void PhysicsObject::set_new_sphere_velocities(PhysicsObject* object2)
     Vector3 newVelocity2 = (velocity2 - (position2-position1)*velocity2MassRatio/(positionMagnitude*positionMagnitude)*velocity2DotProduct)*cOfR2;
     if (this->is_against_wall(this))
     {
-        newVelocity2 = velocity2*(-cOfR1*cOfR2);
-        newVelocity1 = velocity1;
+        Vector3 wallAgainst = this->which_wall_is_sphere_against(this);
+        if (wallAgainst.get_x() == 1)
+        {
+            newVelocity2.set_x(velocity2.get_x()*(-cOfR1*cOfR2));
+            newVelocity1.set_x(velocity1.get_x());
+        }
+        if (wallAgainst.get_y() == 1)
+        {
+            newVelocity2.set_x(velocity2.get_y()*(-cOfR1*cOfR2));
+            newVelocity1.set_x(velocity1.get_y());
+        }
+        if (wallAgainst.get_z() == 1)
+        {
+            newVelocity2.set_z(velocity2.get_z()*(-cOfR1*cOfR2));
+            newVelocity1.set_z(velocity1.get_z());
+        }
     }
     if (object2->is_against_wall(object2))
     {
-        newVelocity1 = velocity1*(-cOfR1*cOfR2);
-        newVelocity2 = velocity2;
+        Vector3 wallAgainst = object2->which_wall_is_sphere_against(object2);
+        if (wallAgainst.get_x() == 1)
+        {
+            newVelocity1.set_x(velocity1.get_x()*(-cOfR1*cOfR2));
+            newVelocity2.set_x(velocity2.get_x());
+        }
+        if (wallAgainst.get_y() == 1)
+        {
+            newVelocity1.set_y(velocity1.get_y()*(-cOfR1*cOfR2));
+            newVelocity2.set_y(velocity2.get_y());
+        }
+        if (wallAgainst.get_z() == 1)
+        {
+            newVelocity1.set_z(velocity1.get_z()*(-cOfR1*cOfR2));
+            newVelocity2.set_z(velocity2.get_z());
+        }
     }
     this->set_velocity(newVelocity1);
     object2->set_velocity(newVelocity2);
@@ -306,15 +333,12 @@ bool PhysicsObject::are_spheres_collided(PhysicsObject object2)
 
 void PhysicsObject::sphere_collision_loop()
 {
-    //    int numberOfSpheres = mObjectList.length();
-    //    for (int i=0; i<numberOfSpheres; i++)
-    //    {
-    //        for (int j=i, j<numberOfSpheres; j++)
-    //        {
-    //            double interferenceDistance = is_sphere_collided(object2);
-
-    //        }
-    //    }
+    int numberOfSpheres = mObjectList->size();
+    for (int i=0; i<numberOfSpheres; i++)
+    {
+        PhysicsObject* object2 = mObjectList->at(i);
+        sphere_collision(object2);
+    }
 }
 
 Vector3 PhysicsObject::which_wall_is_sphere_against(PhysicsObject* object)
@@ -345,4 +369,9 @@ bool PhysicsObject::is_against_wall(PhysicsObject* object)
         againstWall = true;
     }
     return againstWall;
+}
+
+void PhysicsObject::pass_in_object_list(std::vector<PhysicsObject*> *objectList)
+{
+    mObjectList = objectList;
 }

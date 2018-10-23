@@ -12,14 +12,14 @@ public:
     PhysicsObject();
     PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration);
     PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration, float radius, double mass, double cOfR, double fluidDensity);
-//    PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration, float radius, double mass, double cOfR, double fluidDensity);
+    //    PhysicsObject(Vector3 position, Vector3 velocity, Vector3 acceleration, float radius, double mass, double cOfR, double fluidDensity);
     double  get_coefficient_of_restitution() const;
     Vector3 get_position() const;
     Vector3 get_velocity() const;
     Vector3 get_acceleration() const;
     Vector3 get_gravity() const;
     double  get_fluid_density() const;
-//    Vector3 get_drag_force() const;
+    //    Vector3 get_drag_force() const;
     void set_position(Vector3 const position);
     void set_velocity(Vector3 const velocity);
     void set_acceleration(Vector3 const acceleration);
@@ -47,6 +47,7 @@ public:
     Vector3 which_wall_is_sphere_against(PhysicsObject *object);
     bool is_against_wall(PhysicsObject *object);
     bool are_spheres_collided(PhysicsObject object2);
+    void pass_in_object_list(std::vector<PhysicsObject *> *objectList);
 
 protected:
 
@@ -63,6 +64,7 @@ private:
     float   mRadius{1};
     double  mBoxSize{5};
     std::vector<PhysicsObject*> *mObjectList;
+
 
 };
 #endif // PHYSICSOBJECT_H
