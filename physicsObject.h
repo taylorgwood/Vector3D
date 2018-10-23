@@ -48,7 +48,6 @@ public:
     bool is_against_wall(PhysicsObject *object);
     bool are_spheres_collided(PhysicsObject object2);
     void pass_in_object_list(std::vector<PhysicsObject *> *objectList);
-//    std::vector<PhysicsObject*> get_object_list() const;
 
 protected:
 

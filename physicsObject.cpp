@@ -159,7 +159,7 @@ void PhysicsObject::update(double timestep)
     set_velocity(newVelocity);
     set_position(newPosition);
     box_collision();
-    sphere_collision_loop();
+//    sphere_collision_loop();
 }
 
 void PhysicsObject::box_collision()
