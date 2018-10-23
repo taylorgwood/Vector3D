@@ -1,6 +1,7 @@
 #ifndef PHYSICSOBJECT_H
 #define PHYSICSOBJECT_H
 #include "vector3d.h"
+#include <vector>
 class Vector3;
 class PhysicsWorld;
 
@@ -27,18 +28,25 @@ public:
     void set_radius(float const radius);
     void set_mass(double const mass);
     void set_fluid_density(double const fluidDensity);
-    void toggle_drag_force(bool onOff);
+    void enable_drag_force(bool On);
     Vector3 calculate_drag_force();
 
     double get_mass() const;
     float get_radius() const;
+    double get_box_size() const;
     void update(double timestep);
     void box_collision();
     void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
     void move_back_from_wall(Vector3 directionOfMove);
     void set_velocity_after_bounce(double direction);
-    Vector3 sphere_collision(PhysicsObject object2);
-    void move_spheres_apart(PhysicsObject object2);
+    void sphere_collision(PhysicsObject* object2);
+    void set_new_sphere_velocities(PhysicsObject *object2);
+    void move_spheres_apart(PhysicsObject *object2);
+    double get_sphere_collision_distance(PhysicsObject object2);
+    void sphere_collision_loop();
+    Vector3 which_wall_is_sphere_against(PhysicsObject *object);
+    bool is_against_wall(PhysicsObject *object);
+    bool are_spheres_collided(PhysicsObject object2);
 
 protected:
 
@@ -54,6 +62,7 @@ private:
     double  mMass{10};
     float   mRadius{1};
     double  mBoxSize{5};
+    std::vector<PhysicsObject*> *mObjectList;
 
 };
 #endif // PHYSICSOBJECT_H

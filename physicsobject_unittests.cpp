@@ -65,7 +65,7 @@ TEST(Update,givenPhysicsObjectAtRestAndTwoTimesteps_getUpdatedPosition)
     Vector3 acceleration = gravity;
     PhysicsObject physicsObject(position, velocity, acceleration);
     bool turnOff{0};
-    physicsObject.toggle_drag_force(turnOff);
+    physicsObject.enable_drag_force(turnOff);
 
     double timestep{0.1};
     physicsObject.update(timestep);
@@ -80,7 +80,7 @@ TEST(DragForce,givenPhysicsObject_getDragAfterFourTimestep)
 {
     PhysicsObject physicsObject;
     bool turnOn{1};
-    physicsObject.toggle_drag_force(turnOn);
+    physicsObject.enable_drag_force(turnOn);
     double timestep{0.01};
     for(int i=0; i<4; i++)
     {
@@ -95,7 +95,7 @@ TEST(DragForce,givenPhysicsObject_getAccelerationAfterTenTimestep)
 {
     PhysicsObject physicsObject;
     bool turnOn{1};
-    physicsObject.toggle_drag_force(turnOn);
+    physicsObject.enable_drag_force(turnOn);
     double timestep{0.01};
     for(int i=0; i<10; i++)
     {
@@ -153,7 +153,7 @@ TEST(MoveBack,givenMultipleDirectionsToMove_getNewPosition)
     EXPECT_EQ_VECTORS(expectedPosition,physicsObject.get_position());
 }
 
-TEST(Bounce,givenXVelocityTowardWallNoGravity_getNegativeVelocity)
+TEST(WallBounce,givenXVelocityTowardWallNoGravity_getNegativeVelocity)
 {
     Vector3 position{5, 0, 0};
     Vector3 velocity{10, 0, 0};
@@ -167,7 +167,7 @@ TEST(Bounce,givenXVelocityTowardWallNoGravity_getNegativeVelocity)
     EXPECT_EQ_VECTORS(expectedVelocity, physicsObject.get_velocity());
 }
 
-TEST(Bounce,givenZVelocityTowardWallNoGravity_getNegativeVelocity)
+TEST(WallBounce,givenZVelocityTowardWallNoGravity_getNegativeVelocity)
 {
     Vector3 position{0, 0, 5};
     Vector3 velocity{0, 0, 10};
@@ -181,7 +181,7 @@ TEST(Bounce,givenZVelocityTowardWallNoGravity_getNegativeVelocity)
     EXPECT_EQ_VECTORS(expectedVelocity, physicsObject.get_velocity());
 }
 
-TEST(Bounce,givenXYZVelocityTowardWallNoGravity_getNegativeVelocity)
+TEST(WallBounce,givenXYZVelocityTowardWallNoGravity_getNegativeVelocity)
 {
     Vector3 position{5, -5, 5};
     Vector3 velocity{1, -20, 1};
@@ -195,7 +195,7 @@ TEST(Bounce,givenXYZVelocityTowardWallNoGravity_getNegativeVelocity)
     EXPECT_EQ_VECTORS(expectedVelocity, physicsObject.get_velocity());
 }
 
-TEST(Bounce,givenZVelocityAtWallNoGravity_getCorrectLocation)
+TEST(WallBounce,givenZVelocityAtWallNoGravity_getCorrectLocation)
 {
     Vector3 position{0, 0, 5};
     Vector3 velocity{0, 0, 10};
@@ -211,7 +211,7 @@ TEST(Bounce,givenZVelocityAtWallNoGravity_getCorrectLocation)
     EXPECT_EQ_VECTORS(expectedPosition, physicsObject.get_position());
 }
 
-TEST(Bounce,givenYVelocityAtWallNoDrag_getCorrectLocationAfterTwoTimesteps)
+TEST(WallBounce,givenYVelocityAtWallNoDrag_getCorrectLocationAfterTwoTimesteps)
 {
     Vector3 position{0, -3.65, 0};
     Vector3 velocity{0, -1, 0};
@@ -221,7 +221,8 @@ TEST(Bounce,givenYVelocityAtWallNoDrag_getCorrectLocationAfterTwoTimesteps)
     float sphereRadius = 1.0;
     physicsObject.create_sphere(position,sphereRadius,velocity);
     physicsObject.reset_gravity(gravity);
-    physicsObject.toggle_drag_force(0);
+    bool turnOff{0};
+    physicsObject.enable_drag_force(turnOff);
 
     double timestep{0.1};
     for(int i=0; i<10; i++)
@@ -245,11 +246,12 @@ TEST(SphereCollision,givenTwoIdenticalSpheres_getCorrectVelocities)
     double cOfR{0.8};
     double fluidDensity{0};
 
-    PhysicsObject object1(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
-    PhysicsObject object2(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
 
-    Vector3 calculatedVelocity2 = object1.sphere_collision(object2);
-    Vector3 calculatedVelocity1 = object1.get_velocity();
+    object1->sphere_collision(object2);
+    Vector3 calculatedVelocity1 = object1->get_velocity();
+    Vector3 calculatedVelocity2 = object2->get_velocity();
     Vector3 expectedVelocity1{-0.8,0,0};
     Vector3 expectedVelocity2{0.8,0,0};
 
@@ -270,11 +272,12 @@ TEST(SphereCollision,givenTwoSpheres_getCorrectCollision)
     double cOfR{1.0};
     double fluidDensity{0};
 
-    PhysicsObject object1(position1,velocity1,gravity,radius,mass1,cOfR,fluidDensity);
-    PhysicsObject object2(position2,velocity2,gravity,radius,mass2,cOfR,fluidDensity);
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass1,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass2,cOfR,fluidDensity);
 
-    double calculatedVelocity2 = object1.sphere_collision(object2).get_x();
-    double calculatedVelocity1 = object1.get_velocity().get_x();
+    object1->sphere_collision(object2);
+    double calculatedVelocity1 = object1->get_velocity().get_x();
+    double calculatedVelocity2 = object2->get_velocity().get_x();
     double expectedVelocity1{-1.6666};
     double expectedVelocity2{0.33333};
 
@@ -293,12 +296,12 @@ TEST(SeperateSpheres,givenTwoSpheresCollided_getCorrectPosition)
     double cOfR{0.8};
     double fluidDensity{0};
 
-    PhysicsObject object1(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
-    PhysicsObject object2(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
 
-    object1.move_spheres_apart(object2);
-    Vector3 calculatedPosition1 = object1.get_position();
-    Vector3 calculatedPosition2 = position2;
+    object1->move_spheres_apart(object2);
+    Vector3 calculatedPosition1 = object1->get_position();
+    Vector3 calculatedPosition2 = object2->get_position();
     Vector3 expectedPosition1{2.25, 0, 0};
     Vector3 expectedPosition2{0.25, 0, 0};
 
@@ -317,12 +320,12 @@ TEST(SeperateSpheres,givenTwoSpheresApart_getCorrectPosition)
     double cOfR{0.8};
     double fluidDensity{0};
 
-    PhysicsObject object1(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
-    PhysicsObject object2(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
 
-    object1.move_spheres_apart(object2);
-    Vector3 calculatedPosition1 = object1.get_position();
-    Vector3 calculatedPosition2 = position2;
+    object1->move_spheres_apart(object2);
+    Vector3 calculatedPosition1 = object1->get_position();
+    Vector3 calculatedPosition2 = object2->get_position();
     Vector3 expectedPosition1{3, 0, 0};
     Vector3 expectedPosition2{0.25, 0, 0};
 
@@ -341,15 +344,236 @@ TEST(SeperateSpheres,givenTwoSpheresCollidedAcrossZero_getCorrectPosition)
     double cOfR{0.8};
     double fluidDensity{0};
 
-    PhysicsObject object1(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
-    PhysicsObject object2(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity,gravity,radius,mass,cOfR,fluidDensity);
 
-    object1.move_spheres_apart(object2);
-    Vector3 calculatedPosition1 = object1.get_position();
-    Vector3 calculatedPosition2 = position2;
+    object1->move_spheres_apart(object2);
+    Vector3 calculatedPosition1 = object1->get_position();
+    Vector3 calculatedPosition2 = object2->get_position();
     Vector3 expectedPosition1{1.75, 0, 0};
     Vector3 expectedPosition2{-0.25, 0, 0};
 
     EXPECT_EQ_VECTORS(expectedPosition1,calculatedPosition1);
     EXPECT_EQ_VECTORS(expectedPosition2,calculatedPosition2);
 }
+
+TEST(SphereCollision,givenTwoSpheresSecondIsAgainstWall_getCorrectPositions)
+{
+    Vector3 position1{0, 0, -2.25};
+    Vector3 position2{0, 0, -4};
+    Vector3 velocity1{0, 0, 0};
+    Vector3 velocity2{0, 0, -1};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+
+    object1->sphere_collision(object2);
+    Vector3 calculatedPosition1 = object1->get_position();
+    Vector3 calculatedPosition2 = object2->get_position();
+    Vector3 expectedPosition1{0, 0, -2};
+    Vector3 expectedPosition2{0, 0, -4};
+
+    EXPECT_EQ_VECTORS(expectedPosition1,calculatedPosition1);
+    EXPECT_EQ_VECTORS(expectedPosition2,calculatedPosition2);
+}
+
+TEST(SphereCollision,givenTwoSpheresApart_getCorrectPositions)
+{
+    Vector3 position1{0, 0, -2};
+    Vector3 position2{0, 0, 2};
+    Vector3 velocity1{0, 0, 0};
+    Vector3 velocity2{0, 0, -1};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+
+    object1->sphere_collision(object2);
+    Vector3 calculatedPosition1 = object1->get_position();
+    Vector3 calculatedPosition2 = object2->get_position();
+    Vector3 expectedPosition1{0, 0, -2};
+    Vector3 expectedPosition2{0, 0, 2};
+
+    EXPECT_EQ_VECTORS(expectedPosition1,calculatedPosition1);
+    EXPECT_EQ_VECTORS(expectedPosition2,calculatedPosition2);
+}
+
+TEST(SphereCollision,givenTwoSpheresCollided_getCorrectVelocities)
+{
+    Vector3 position1{0, 0, -1};
+    Vector3 position2{0, 0, 1};
+    Vector3 velocity1{0, 0, 1};
+    Vector3 velocity2{0, 0, -1};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+
+    object1->sphere_collision(object2);
+    Vector3 calculatedVelocity1 = object1->get_velocity();
+    Vector3 calculatedVelocity2 = object2->get_velocity();
+    Vector3 expectedVelocity1{0, 0, -0.8};
+    Vector3 expectedVelocity2{0, 0, 0.8};
+
+    EXPECT_EQ_VECTORS(expectedVelocity1,calculatedVelocity1);
+    EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
+}
+
+TEST(SphereCollision,givenTwoSpheresFirstIsAgainstWall_getCorrectPositions)
+{
+    Vector3 position1{0, 0, -4};
+    Vector3 position2{0, 0, -2.25};
+    Vector3 velocity1{0, 0, 0};
+    Vector3 velocity2{0, 0, -1};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+
+    object1->sphere_collision(object2);
+    Vector3 calculatedPosition1 = object1->get_position();
+    Vector3 calculatedPosition2 = object2->get_position();
+    Vector3 expectedPosition1{0, 0, -4};
+    Vector3 expectedPosition2{0, 0, -2.25};
+
+    EXPECT_EQ_VECTORS(expectedPosition1,calculatedPosition1);
+    EXPECT_EQ_VECTORS(expectedPosition2,calculatedPosition2);
+}
+
+TEST(AgainstWall,givenFirstSphereAgainstWall_getAgainstWallFlag)
+{
+    Vector3 position1{0, 0, -4};
+    Vector3 velocity1{0, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+
+    bool isAgainstWall = object1->is_against_wall(object1);
+
+    EXPECT_TRUE(isAgainstWall);
+}
+
+TEST(AgainstWall,givenSecondSphereAgainstWall_getAgainstWallFlag)
+{
+    Vector3 position1{0, 0, 0};
+    Vector3 velocity1{0, 0, 0};
+    Vector3 position2{0, 0, 4};
+    Vector3 velocity2{0, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+
+    bool isAgainstWall1 = object1->is_against_wall(object1);
+    bool isAgainstWall2 = object2->is_against_wall(object2);
+
+    EXPECT_FALSE(isAgainstWall1);
+    EXPECT_TRUE(isAgainstWall2);
+}
+
+TEST(SphereCollision,givenTwoSpheresFirstAgainstWall_getCorrectVelocities)
+{
+    Vector3 position1{0, 0, -4};
+    Vector3 position2{0, 0, -2.25};
+    Vector3 velocity1{0, 0, 0};
+    Vector3 velocity2{0, 0, -1};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR1{0.8};
+    double cOfR2{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR1,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR2,fluidDensity);
+
+    object1->sphere_collision(object2);
+    Vector3 calculatedVelocity1 = object1->get_velocity();
+    Vector3 calculatedVelocity2 = object2->get_velocity();
+    double newVelocityInZDirection{0.64};
+    Vector3 expectedVelocity1{0, 0, 0};
+    Vector3 expectedVelocity2{0, 0, newVelocityInZDirection};
+
+    EXPECT_EQ_VECTORS(expectedVelocity1,calculatedVelocity1);
+    EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
+}
+
+TEST(SphereCollision,givenTwoSpheresSecondAgainstWall_getCorrectVelocities)
+{
+    Vector3 position1{0, 0, -2.25};
+    Vector3 position2{0, 0, -4};
+    Vector3 velocity1{0, 0, -1};
+    Vector3 velocity2{0, 0, 0};
+    Vector3 gravity{0, 0, 0};
+    float radius{1};
+    double mass{1};
+    double cOfR1{0.8};
+    double cOfR2{0.8};
+    double fluidDensity{0};
+
+    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR1,fluidDensity);
+    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR2,fluidDensity);
+
+    object1->sphere_collision(object2);
+    Vector3 calculatedVelocity1 = object1->get_velocity();
+    Vector3 calculatedVelocity2 = object2->get_velocity();
+    double newVelocity1InZDirection{0.64};
+    Vector3 expectedVelocity1{0, 0, newVelocity1InZDirection};
+    Vector3 expectedVelocity2{0, 0, 0};
+
+    EXPECT_EQ_VECTORS(expectedVelocity1,calculatedVelocity1);
+    EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
+}
+
+//TEST(SphereCollision,givenTwoSpheresSecondAgainstWallFirstWithYZVelocity_getCorrectVelocities)
+//{
+//    Vector3 position1{0, 0, -2.25};
+//    Vector3 position2{0, 0, -4};
+//    Vector3 velocity1{0, -1, -1};
+//    Vector3 velocity2{0, 0, 0};
+//    Vector3 gravity{0, 0, 0};
+//    float radius{1};
+//    double mass{1};
+//    double cOfR1{0.8};
+//    double cOfR2{0.8};
+//    double fluidDensity{0};
+
+//    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR1,fluidDensity);
+//    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR2,fluidDensity);
+
+//    object1->sphere_collision(object2);
+//    Vector3 calculatedVelocity1 = object1->get_velocity();
+//    Vector3 calculatedVelocity2 = object2->get_velocity();
+//    double newVelocity1InYDirection = velocity1.get_y()*cOfR1;
+//    double newVelocity1InZDirection = velocity1.get_z()*cOfR1*cOfR2;
+//    Vector3 expectedVelocity1{0, newVelocity1InYDirection, newVelocity1InZDirection};
+//    Vector3 expectedVelocity2{0, 0, 0};
+
+//    EXPECT_EQ_VECTORS(expectedVelocity1,calculatedVelocity1);
+//    EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
+//}

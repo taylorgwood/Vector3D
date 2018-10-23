@@ -100,9 +100,9 @@ void PhysicsObject::set_fluid_density(const double fluidDensity)
     mFluidDensity = fluidDensity;
 }
 
-void PhysicsObject::toggle_drag_force(bool onOff)
+void PhysicsObject::enable_drag_force(bool On)
 {
-    mDragForceOn = onOff;
+    mDragForceOn = On;
 }
 
 Vector3 PhysicsObject::calculate_drag_force()
@@ -145,6 +145,11 @@ float PhysicsObject::get_radius() const
     return mRadius;
 }
 
+double PhysicsObject::get_box_size() const
+{
+    return mBoxSize;
+}
+
 void PhysicsObject::update(double timestep)
 {   
     Vector3 newPosition = get_position() + get_velocity()*timestep;
@@ -154,6 +159,7 @@ void PhysicsObject::update(double timestep)
     set_velocity(newVelocity);
     set_position(newPosition);
     box_collision();
+    //    sphere_collision_loop();
 }
 
 void PhysicsObject::box_collision()
@@ -164,20 +170,20 @@ void PhysicsObject::box_collision()
     double z{3};
 
     double detectionSize = boxSize-get_radius();
-    if (mPosition.get_x() >= detectionSize || mPosition.get_x() <= -detectionSize)
+    if (which_wall_is_sphere_against(this).get_x() == 1)
     {
         mPosition.set_x(detectionSize*mPosition.sign().get_x());
-        set_velocity_after_bounce(1);
+        set_velocity_after_bounce(x);
     }
-    if(mPosition.get_y() >= detectionSize || mPosition.get_y() <= -detectionSize)
+    if (which_wall_is_sphere_against(this).get_y() == 1)
     {
         mPosition.set_y(detectionSize*mPosition.sign().get_y());
-        set_velocity_after_bounce(2);
+        set_velocity_after_bounce(y);
     }
-    if(mPosition.get_z() >= detectionSize ||mPosition.get_z() <= -detectionSize )
+    if (which_wall_is_sphere_against(this).get_z() == 1)
     {
         mPosition.set_z(detectionSize*mPosition.sign().get_z());
-        set_velocity_after_bounce(3);
+        set_velocity_after_bounce(z);
     }
 }
 
@@ -218,16 +224,23 @@ void PhysicsObject::move_back_from_wall(Vector3 directionOfMove)
     set_position(newPosition);
 }
 
-Vector3 PhysicsObject::sphere_collision(PhysicsObject object2)
+void PhysicsObject::sphere_collision(PhysicsObject* object2)
 {
-    Vector3 position1 = get_position();
-    Vector3 position2 = object2.get_position();
-    Vector3 velocity1 = get_velocity();
-    Vector3 velocity2 = object2.get_velocity();
+    set_new_sphere_velocities(object2);
+    move_spheres_apart(object2);
+
+}
+
+void PhysicsObject::set_new_sphere_velocities(PhysicsObject* object2)
+{   
+    Vector3 position1 = this->get_position();
+    Vector3 position2 = object2->get_position();
+    Vector3 velocity1 = this->get_velocity();
+    Vector3 velocity2 = object2->get_velocity();
     double cOfR1 = get_coefficient_of_restitution();
-    double cOfR2 = object2.get_coefficient_of_restitution();
+    double cOfR2 = object2->get_coefficient_of_restitution();
     double mass1 = get_mass();
-    double mass2 = object2.get_mass();
+    double mass2 = object2->get_mass();
     double velocity1MassRatio = (2*mass2/(mass1 + mass2));
     double velocity2MassRatio = (2*mass1/(mass1 + mass2));
     double positionMagnitude = (position1-position2).get_magnitude();
@@ -236,21 +249,100 @@ Vector3 PhysicsObject::sphere_collision(PhysicsObject object2)
 
     Vector3 newVelocity1 = (velocity1 - (position1-position2)*velocity1MassRatio/(positionMagnitude*positionMagnitude)*velocity1DotProduct)*cOfR1;
     Vector3 newVelocity2 = (velocity2 - (position2-position1)*velocity2MassRatio/(positionMagnitude*positionMagnitude)*velocity2DotProduct)*cOfR2;
-    set_velocity(newVelocity1);
-    return newVelocity2;
+    if (this->is_against_wall(this))
+    {
+        newVelocity2 = velocity2*(-cOfR1*cOfR2);
+        newVelocity1 = velocity1;
+    }
+    if (object2->is_against_wall(object2))
+    {
+        newVelocity1 = velocity1*(-cOfR1*cOfR2);
+        newVelocity2 = velocity2;
+    }
+    this->set_velocity(newVelocity1);
+    object2->set_velocity(newVelocity2);
 }
 
 
-void PhysicsObject::move_spheres_apart(PhysicsObject object2)
+void PhysicsObject::move_spheres_apart(PhysicsObject *object2)
 {
-    Vector3 positionDifference = (get_position() - object2.get_position());
-    double interferenceLimit = (get_radius() + object2.get_radius());
+    Vector3 positionDifference = (get_position() - object2->get_position());
+    double interferenceLimit = (get_radius() + object2->get_radius());
     double interferenceDistance = interferenceLimit - positionDifference.get_magnitude();
 
     if (interferenceDistance > 0)
     {
         Vector3 directionOfMove = positionDifference.normalize();
-        Vector3 newPosition = directionOfMove*(interferenceDistance);
-        set_position(get_position() + newPosition);
+        Vector3 moveDistance = directionOfMove*(interferenceDistance);
+        Vector3 newPosition1 = get_position() + moveDistance;
+        Vector3 currentPosition1 = get_position();
+        Vector3 currentPosition2 = object2->get_position();
+        this->set_position(newPosition1);
+        if (is_against_wall(this))
+        {
+            this->set_position(currentPosition1);
+        }
     }
+}
+
+double PhysicsObject::get_sphere_collision_distance(PhysicsObject object2)
+{
+    Vector3 positionDifference = (get_position() - object2.get_position());
+    double interferenceLimit = (get_radius() + object2.get_radius());
+    double interferenceDistance = interferenceLimit - positionDifference.get_magnitude();
+    return interferenceDistance;
+}
+
+bool PhysicsObject::are_spheres_collided(PhysicsObject object2)
+{
+    double interferenceDistance = get_sphere_collision_distance(object2);
+    bool areCollided{false};
+    if (interferenceDistance > 0)
+    {
+        areCollided = true;
+    }
+    return areCollided;
+}
+
+void PhysicsObject::sphere_collision_loop()
+{
+    //    int numberOfSpheres = mObjectList.length();
+    //    for (int i=0; i<numberOfSpheres; i++)
+    //    {
+    //        for (int j=i, j<numberOfSpheres; j++)
+    //        {
+    //            double interferenceDistance = is_sphere_collided(object2);
+
+    //        }
+    //    }
+}
+
+Vector3 PhysicsObject::which_wall_is_sphere_against(PhysicsObject* object)
+{
+    Vector3 against_wall{0,0,0};
+    double buffer{0.001};
+    double detectionSize = object->get_box_size()-object->get_radius()-buffer;
+    if (object->get_position().get_x() >= detectionSize || object->get_position().get_x() <= -detectionSize)
+    {
+        against_wall.set_x(1);
+    }
+    if(object->get_position().get_y() >= detectionSize || object->get_position().get_y() <= -detectionSize)
+    {
+        against_wall.set_y(1);
+    }
+    if(object->get_position().get_z() >= detectionSize ||object->get_position().get_z() <= -detectionSize )
+    {
+        against_wall.set_z(1);
+    }
+    return against_wall;
+}
+
+bool PhysicsObject::is_against_wall(PhysicsObject* object)
+{
+    bool againstWall{false};
+    if (which_wall_is_sphere_against(object).get_magnitude() > 0)
+    {
+        againstWall = true;
+    }
+    return againstWall;
 }
