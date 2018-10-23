@@ -259,7 +259,7 @@ TEST(SphereCollision,givenTwoIdenticalSpheres_getCorrectVelocities)
     EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
 }
 
-TEST(SphereCollision,givenTwoSpheres_getCorrectCollision)
+TEST(SphereCollision,givenTwoSpheres_getCorrectVelocities)
 {
     Vector3 position1{0, 0, 0};
     Vector3 position2{1, 0, 0};

@@ -224,10 +224,13 @@ void PhysicsObject::move_back_from_wall(Vector3 directionOfMove)
     set_position(newPosition);
 }
 
-void PhysicsObject::sphere_collision(PhysicsObject* object2)
+void PhysicsObject::sphere_collision(PhysicsObject* objectToCompare)
 {
-    set_new_sphere_velocities(object2);
-    move_spheres_apart(object2);
+    if (objectToCompare != this)
+    {
+    set_new_sphere_velocities(objectToCompare);
+    move_spheres_apart(objectToCompare);
+    }
 }
 
 void PhysicsObject::set_new_sphere_velocities(PhysicsObject* object2)
@@ -251,17 +254,18 @@ void PhysicsObject::set_new_sphere_velocities(PhysicsObject* object2)
     if (this->is_against_wall(this))
     {
         Vector3 wallAgainst = this->which_wall_is_sphere_against(this);
-        if (wallAgainst.get_x() == 1)
+        double onWall{1};
+        if (wallAgainst.get_x() == onWall)
         {
             newVelocity2.set_x(velocity2.get_x()*(-cOfR1*cOfR2));
             newVelocity1.set_x(velocity1.get_x());
         }
-        if (wallAgainst.get_y() == 1)
+        if (wallAgainst.get_y() == onWall)
         {
-            newVelocity2.set_x(velocity2.get_y()*(-cOfR1*cOfR2));
-            newVelocity1.set_x(velocity1.get_y());
+            newVelocity2.set_y(velocity2.get_y()*(-cOfR1*cOfR2));
+            newVelocity1.set_y(velocity1.get_y());
         }
-        if (wallAgainst.get_z() == 1)
+        if (wallAgainst.get_z() == onWall)
         {
             newVelocity2.set_z(velocity2.get_z()*(-cOfR1*cOfR2));
             newVelocity1.set_z(velocity1.get_z());
@@ -270,17 +274,18 @@ void PhysicsObject::set_new_sphere_velocities(PhysicsObject* object2)
     if (object2->is_against_wall(object2))
     {
         Vector3 wallAgainst = object2->which_wall_is_sphere_against(object2);
-        if (wallAgainst.get_x() == 1)
+        double onWall{1};
+        if (wallAgainst.get_x() == onWall)
         {
             newVelocity1.set_x(velocity1.get_x()*(-cOfR1*cOfR2));
             newVelocity2.set_x(velocity2.get_x());
         }
-        if (wallAgainst.get_y() == 1)
+        if (wallAgainst.get_y() == onWall)
         {
             newVelocity1.set_y(velocity1.get_y()*(-cOfR1*cOfR2));
             newVelocity2.set_y(velocity2.get_y());
         }
-        if (wallAgainst.get_z() == 1)
+        if (wallAgainst.get_z() == onWall)
         {
             newVelocity1.set_z(velocity1.get_z()*(-cOfR1*cOfR2));
             newVelocity2.set_z(velocity2.get_z());
@@ -289,7 +294,6 @@ void PhysicsObject::set_new_sphere_velocities(PhysicsObject* object2)
     this->set_velocity(newVelocity1);
     object2->set_velocity(newVelocity2);
 }
-
 
 void PhysicsObject::move_spheres_apart(PhysicsObject *object2)
 {

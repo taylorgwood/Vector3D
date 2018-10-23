@@ -39,7 +39,7 @@ public:
     void create_sphere(Vector3 shapeLocation, float sphereRadius, Vector3 initialVelocity);
     void move_back_from_wall(Vector3 directionOfMove);
     void set_velocity_after_bounce(double direction);
-    void sphere_collision(PhysicsObject* object2);
+    void sphere_collision(PhysicsObject* objectToCompare);
     void set_new_sphere_velocities(PhysicsObject *object2);
     void move_spheres_apart(PhysicsObject *object2);
     double get_sphere_collision_distance(PhysicsObject object2);
