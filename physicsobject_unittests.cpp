@@ -635,3 +635,32 @@ TEST(SphereCollision,givenObjectList_getCorrectVelocitiesAfterCollision)
     EXPECT_EQ_VECTORS(expectedVelocity1,calculatedVelocity1);
     EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
 }
+
+//TEST(Update,givenObjectList_getCorrectVelocitiesAfterCollision)
+//{
+//    Vector3 position1{0, 0, -1};
+//    Vector3 position2{0, 0, 1};
+//    Vector3 velocity1{0, 0, 1};
+//    Vector3 velocity2{0, 0, -1};
+//    Vector3 gravity{0, 0, 0};
+//    float radius{1};
+//    double mass{1};
+//    double cOfR{0.8};
+//    double fluidDensity{0};
+
+//    PhysicsObject* object1 = new PhysicsObject(position1,velocity1,gravity,radius,mass,cOfR,fluidDensity);
+//    PhysicsObject* object2 = new PhysicsObject(position2,velocity2,gravity,radius,mass,cOfR,fluidDensity);
+
+//    std::vector<PhysicsObject*> *objectList = new std::vector<PhysicsObject*>;
+//    objectList->push_back(object1);
+//    objectList->push_back(object2);
+//    object1->pass_in_object_list(objectList);
+//    object1->sphere_collision_loop();
+//    Vector3 calculatedVelocity1 = object1->get_velocity();
+//    Vector3 calculatedVelocity2 = object2->get_velocity();
+//    Vector3 expectedVelocity1{0, 0, -0.8};
+//    Vector3 expectedVelocity2{0, 0, 0.8};
+
+//    EXPECT_EQ_VECTORS(expectedVelocity1,calculatedVelocity1);
+//    EXPECT_EQ_VECTORS(expectedVelocity2,calculatedVelocity2);
+//}

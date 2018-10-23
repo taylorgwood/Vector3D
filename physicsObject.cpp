@@ -159,7 +159,7 @@ void PhysicsObject::update(double timestep)
     set_velocity(newVelocity);
     set_position(newPosition);
     box_collision();
-    //    sphere_collision_loop();
+    sphere_collision_loop();
 }
 
 void PhysicsObject::box_collision()
@@ -228,8 +228,8 @@ void PhysicsObject::sphere_collision(PhysicsObject* objectToCompare)
 {
     if (objectToCompare != this)
     {
-    set_new_sphere_velocities(objectToCompare);
-    move_spheres_apart(objectToCompare);
+        set_new_sphere_velocities(objectToCompare);
+        move_spheres_apart(objectToCompare);
     }
 }
 
@@ -337,11 +337,14 @@ bool PhysicsObject::are_spheres_collided(PhysicsObject object2)
 
 void PhysicsObject::sphere_collision_loop()
 {
-    int numberOfSpheres = mObjectList->size();
-    for (int i=0; i<numberOfSpheres; i++)
+    if (mObjectList != nullptr)
     {
-        PhysicsObject* object2 = mObjectList->at(i);
-        sphere_collision(object2);
+        int numberOfSpheres = mObjectList->size();
+        for (int i=0; i<numberOfSpheres; i++)
+        {
+            PhysicsObject* object2 = mObjectList->at(i);
+            sphere_collision(object2);
+        }
     }
 }
 
@@ -377,5 +380,8 @@ bool PhysicsObject::is_against_wall(PhysicsObject* object)
 
 void PhysicsObject::pass_in_object_list(std::vector<PhysicsObject*> *objectList)
 {
+    if (mObjectList != nullptr)
+        delete mObjectList;
+
     mObjectList = objectList;
 }

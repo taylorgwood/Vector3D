@@ -63,7 +63,7 @@ private:
     double  mMass{10};
     float   mRadius{1};
     double  mBoxSize{5};
-    std::vector<PhysicsObject*> *mObjectList;
+    std::vector<PhysicsObject*> *mObjectList {nullptr};
 
 
 };
