@@ -380,7 +380,7 @@ bool PhysicsObject::is_against_wall(PhysicsObject* object)
 
 void PhysicsObject::pass_in_object_list(std::vector<PhysicsObject*> *objectList)
 {
-    if (mObjectList != nullptr)
+    if (mObjectList != nullptr && mObjectList != objectList)
         delete mObjectList;
 
     mObjectList = objectList;
