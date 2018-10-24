@@ -159,7 +159,7 @@ void PhysicsObject::update(double timestep)
     set_velocity(newVelocity);
     set_position(newPosition);
     box_collision();
-//    sphere_collision_loop();
+    //    sphere_collision_loop();
 }
 
 void PhysicsObject::box_collision()
@@ -230,8 +230,9 @@ void PhysicsObject::sphere_collision(PhysicsObject* objectToCompare)
     {
         if(this->are_spheres_collided(objectToCompare))
         {
-        set_new_sphere_velocities(objectToCompare);
-        move_spheres_apart(objectToCompare);
+            set_new_sphere_velocities(objectToCompare);
+            move_spheres_apart(objectToCompare);
+            resolve_stuck_spheres(objectToCompare);
         }
     }
 }
@@ -387,4 +388,26 @@ void PhysicsObject::pass_in_object_list(std::vector<PhysicsObject*> *objectList)
         delete mObjectList;
 
     mObjectList = objectList;
+}
+
+void PhysicsObject::resolve_stuck_spheres(PhysicsObject* objectToCompare)
+{
+    Vector3 velocity1 = this->get_velocity();
+    Vector3 velocity2 = objectToCompare->get_velocity();
+    Vector3 velocityDifference = velocity1-velocity2;
+    if (velocityDifference.get_magnitude() < 0.1)
+    {
+        Vector3 positionDifference = (get_position() - objectToCompare->get_position());
+        Vector3 directionOfMove = positionDifference.normalize();
+        double additionalSeparationMultiplier{1.2};
+        Vector3 moveDistance = directionOfMove*(additionalSeparationMultiplier);
+        Vector3 newPosition1 = get_position() + moveDistance;
+        Vector3 currentPosition1 = get_position();
+        Vector3 currentPosition2 = objectToCompare->get_position();
+        this->set_position(newPosition1);
+        if (is_against_wall(this))
+        {
+            this->set_position(currentPosition1);
+        }
+    }
 }
