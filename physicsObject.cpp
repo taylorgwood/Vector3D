@@ -228,8 +228,11 @@ void PhysicsObject::sphere_collision(PhysicsObject* objectToCompare)
 {
     if (objectToCompare != this)
     {
+        if(this->are_spheres_collided(objectToCompare))
+        {
         set_new_sphere_velocities(objectToCompare);
         move_spheres_apart(objectToCompare);
+        }
     }
 }
 
@@ -316,19 +319,19 @@ void PhysicsObject::move_spheres_apart(PhysicsObject *object2)
     }
 }
 
-double PhysicsObject::get_sphere_collision_distance(PhysicsObject object2)
+double PhysicsObject::get_sphere_collision_distance(PhysicsObject *object2)
 {
-    Vector3 positionDifference = (get_position() - object2.get_position());
-    double interferenceLimit = (get_radius() + object2.get_radius());
+    Vector3 positionDifference = (get_position() - object2->get_position());
+    double interferenceLimit = (get_radius() + object2->get_radius());
     double interferenceDistance = interferenceLimit - positionDifference.get_magnitude();
     return interferenceDistance;
 }
 
-bool PhysicsObject::are_spheres_collided(PhysicsObject object2)
+bool PhysicsObject::are_spheres_collided(PhysicsObject *object2)
 {
     double interferenceDistance = get_sphere_collision_distance(object2);
     bool areCollided{false};
-    if (interferenceDistance > 0)
+    if (interferenceDistance > -0.01)
     {
         areCollided = true;
     }

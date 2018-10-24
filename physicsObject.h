@@ -42,11 +42,11 @@ public:
     void sphere_collision(PhysicsObject* objectToCompare);
     void set_new_sphere_velocities(PhysicsObject *object2);
     void move_spheres_apart(PhysicsObject *object2);
-    double get_sphere_collision_distance(PhysicsObject object2);
+    double get_sphere_collision_distance(PhysicsObject *object2);
     void sphere_collision_loop();
     Vector3 which_wall_is_sphere_against(PhysicsObject *object);
     bool is_against_wall(PhysicsObject *object);
-    bool are_spheres_collided(PhysicsObject object2);
+    bool are_spheres_collided(PhysicsObject *object2);
     void pass_in_object_list(std::vector<PhysicsObject *> *objectList);
 
 protected:
