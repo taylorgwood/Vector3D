@@ -19,8 +19,7 @@ add_library(${PROJECT_NAME} STATIC
     vector3d.cpp
     physicsobject.cpp
     physicsobject.h
-    physicsworld.cpp
-    physicsworld.h)
+)
 
 add_executable(${TEST_NAME} vector3d_unittests.cpp)
 target_link_libraries(${TEST_NAME} gtest gtest_main ${PROJECT_NAME})
